@@ -1,0 +1,21 @@
+name: "Website"
+app_id: "www"
+version: "1.0.0"
+description: "yetirocks.com marketing site + demos"
+enabled: true
+rest: true
+graphql: true
+ws: true
+sse: true
+route_prefix: "/"
+
+static_files:
+  path: web
+  route: /
+  index: index.html
+  notFound:
+    file: index.html
+    statusCode: 200
+  build:
+    sourceDir: source
+    command: npm run build
