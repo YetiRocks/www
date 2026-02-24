@@ -135,7 +135,7 @@ a:hover {
   justify-content: center;
   min-height: calc(100vh - 73px);
   text-align: center;
-  padding: var(--space-16) 0 var(--space-16);
+  padding: var(--space-8) 0;
 }
 
 .hero-title {
