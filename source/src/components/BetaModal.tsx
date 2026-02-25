@@ -22,7 +22,7 @@ export default function BetaModal({ onClose }: BetaModalProps) {
     setError('')
 
     try {
-      const resp = await fetch('/www/BetaSignup', {
+      const resp = await fetch('/BetaSignup', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
