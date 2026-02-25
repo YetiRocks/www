@@ -7,7 +7,7 @@ export default function Platform() {
       <div className="page-header">
         <h1 className="page-title">The Platform</h1>
         <p className="page-subtitle">
-          High-performance building blocks for humans and AI agents to turn requirements into production applications.
+          High-performance Rust building blocks for humans and AI agents to turn requirements into production applications.
         </p>
       </div>
 
