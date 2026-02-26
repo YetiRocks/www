@@ -17,7 +17,7 @@ export default function Home({ onGetStarted }: HomeProps) {
           />
           <h1 className="hero-title">Distributed Rust Apps + Data<br />Optimized For Agentic Development</h1>
           <p className="hero-subtitle">
-            Ship blazing fast apps in hours. Scale without rewriting.<br />Adapt to dynamic access patterns in milliseconds.
+            Ship production APIs in minutes. Scale without rewriting.
           </p>
           <div className="hero-actions">
             <button className="btn btn-primary btn-lg" onClick={onGetStarted}>

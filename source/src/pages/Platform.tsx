@@ -5,9 +5,9 @@ export default function Platform() {
   return (
     <div className="container">
       <div className="page-header">
-        <h1 className="page-title">The Platform</h1>
+        <h1 className="page-title">Maximum Performance. Zero Learning Curve.</h1>
         <p className="page-subtitle">
-          High-performance Rust building blocks for humans and AI agents to turn requirements into production applications.
+          High-performance building blocks the look like NodeJS, but run like Rust.
         </p>
       </div>
 
