@@ -15,7 +15,7 @@ export default function Demos() {
       <div className="page-header">
         <h1 className="page-title">Demos</h1>
         <p className="page-subtitle">
-          Interactive examples showing what you can build with Yeti. Each demo runs as a standalone application.
+          Interactive examples showing what you can build with Yeti.<br />Each demo runs as a standalone application.
         </p>
       </div>
 

@@ -7,7 +7,7 @@ export default function Platform() {
       <div className="page-header">
         <h1 className="page-title">Maximum Performance. Zero Learning Curve.</h1>
         <p className="page-subtitle">
-          High-performance building blocks the look like NodeJS, but run like Rust.
+          High-performance building blocks that look like NodeJS, but run like Rust.
         </p>
       </div>
 
