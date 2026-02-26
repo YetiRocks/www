@@ -17,7 +17,7 @@ export default function Home({ onGetStarted }: HomeProps) {
           />
           <h1 className="hero-title">The Performance Platform<br />For Agent-Driven Development</h1>
           <p className="hero-subtitle">
-            Ship production APIs in hours. Scale without rewriting.<br />Build with humans, AI agents, or both.
+            Production Rust in minutes. Scale without rewriting.<br />Build with humans, AI agents, or both.
           </p>
           <div className="hero-actions">
             <button className="btn btn-primary btn-lg" onClick={onGetStarted}>
