@@ -15,9 +15,9 @@ export default function Home({ onGetStarted }: HomeProps) {
             alt="Yeti Platform Architecture"
             className="hero-logo"
           />
-          <h1 className="hero-title">Distributed Rust: Apps + Data<br />Optimized For Agentic Development</h1>
+          <h1 className="hero-title">Distributed Rust Apps + Data<br />Optimized For Agentic Development</h1>
           <p className="hero-subtitle">
-            Ship production APIs in minutes. Scale without rewriting.<br />Build with humans, agents, or both.
+            Ship blazing fast apps in hours. Scale without rewriting.<br />Adapt to dynamic access patterns in milliseconds.
           </p>
           <div className="hero-actions">
             <button className="btn btn-primary btn-lg" onClick={onGetStarted}>
