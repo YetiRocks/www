@@ -20,24 +20,21 @@ interface BestResult {
   throughput: number
   results: {
     throughput?: number
-    p50_latency?: number
-    p99_latency?: number
-    avg_latency?: number
+    p50?: number
+    p99?: number
+    total?: number
+    errors?: number
   }
 }
 
-function formatThroughput(value: number): string {
-  if (value >= 1000) {
-    return value.toLocaleString('en-US', { maximumFractionDigits: 0 })
-  }
-  return value.toLocaleString('en-US', { maximumFractionDigits: 1 })
+function formatNumber(n: number): string {
+  if (n >= 1000000) return (n / 1000000).toFixed(1) + 'M'
+  if (n >= 1000) return (n / 1000).toFixed(n >= 10000 ? 0 : 1) + 'k'
+  return n.toFixed(0)
 }
 
-function formatLatency(ms: number): string {
-  if (ms < 1) {
-    return `${(ms * 1000).toFixed(0)}µs`
-  }
-  return `${ms.toFixed(1)}ms`
+function formatMs(n: number): string {
+  return n.toFixed(2) + 'ms'
 }
 
 export default function Benchmarks() {
@@ -67,12 +64,11 @@ export default function Benchmarks() {
       <div className="page-header">
         <h1 className="page-title">Benchmarks</h1>
         <p className="page-subtitle">
-          Live results from a single Yeti process on commodity hardware. No caching layer, no read replicas, no load balancer.
+          Real-time results from a single Yeti node on commodity hardware. No caching layer, no read replicas, no load balancer.
         </p>
       </div>
 
       <section className="section">
-        <div className="section-label">Live Results</div>
 
         {loading && <p className="bench-loading">Loading benchmark results…</p>}
         {error && <p className="bench-error">Could not load results</p>}
@@ -82,16 +78,17 @@ export default function Benchmarks() {
             const result = results[test.id]
             return (
               <div key={test.id} className="bench-card">
-                <div className="bench-card-value">
-                  {result ? formatThroughput(result.throughput) : '—'}
-                </div>
-                <div className="bench-card-unit">req/s</div>
                 <div className="bench-card-name">{test.name}</div>
-                {result?.results?.p50_latency != null && (
-                  <div className="bench-card-latency">
-                    p50 {formatLatency(result.results.p50_latency)}
+                <div className="bench-card-stats">
+                  <div className="bench-stat">
+                    <span className="bench-stat-value">{result ? formatNumber(result.throughput) : '—'}</span>
+                    <span className="bench-stat-label">requests/sec</span>
                   </div>
-                )}
+                  <div className="bench-stat">
+                    <span className="bench-stat-value">{result?.results?.p50 != null ? formatMs(result.results.p50) : '—'}</span>
+                    <span className="bench-stat-label">p95 latency</span>
+                  </div>
+                </div>
               </div>
             )
           })}
@@ -100,12 +97,6 @@ export default function Benchmarks() {
 
       <section className="section">
         <div className="section-label">Test Configuration</div>
-        <h2 className="section-title">How We Measured</h2>
-        <p className="section-desc">
-          All benchmarks run against a single Yeti process on the local machine. No caching
-          proxies, no connection pooling, no read replicas. The numbers represent what a single
-          Yeti instance can deliver.
-        </p>
 
         <table className="bench-table">
           <thead>
@@ -121,23 +112,23 @@ export default function Benchmarks() {
             </tr>
             <tr>
               <td>Concurrent VUs</td>
-              <td>100</td>
+              <td>50</td>
             </tr>
             <tr>
               <td>Warmup Requests</td>
               <td>1,000</td>
             </tr>
             <tr>
-              <td>Transport</td>
-              <td>HTTPS (TLS 1.3, self-signed)</td>
-            </tr>
-            <tr>
-              <td>Client</td>
-              <td>Rust reqwest with connection pooling</td>
+              <td>Hardware</td>
+              <td>8 Cores / 16GB RAM / 320 GB DISK</td>
             </tr>
             <tr>
               <td>Storage</td>
-              <td>Embedded RocksDB (single instance)</td>
+              <td>Embedded RocksDB</td>
+            </tr>
+            <tr>
+              <td>Transport</td>
+              <td>HTTPS (TLS 1.3)</td>
             </tr>
           </tbody>
         </table>

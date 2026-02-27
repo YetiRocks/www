@@ -434,7 +434,7 @@ code {
 /* ===== Page Headers ===== */
 
 .page-header {
-  padding: var(--space-16) 0 var(--space-8);
+  padding: var(--space-16) 0 var(--space-16);
   text-align: center;
 }
 
@@ -526,38 +526,21 @@ code {
   background: var(--color-white-overlay);
   border: 1px solid var(--color-border-primary);
   border-radius: var(--radius-lg);
-  padding: var(--space-6);
+  padding: var(--space-4);
   text-align: center;
-}
-
-.bench-card-value {
-  font-size: var(--font-size-3xl);
-  font-weight: 200;
-  color: #ffffff;
-  font-family: var(--font-family-mono);
-  line-height: 1.1;
-}
-
-.bench-card-unit {
-  font-size: var(--font-size-xs);
-  color: var(--color-grey);
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-  margin-bottom: var(--space-3);
 }
 
 .bench-card-name {
   font-size: var(--font-size-sm);
   color: var(--color-white);
-  font-weight: 500;
-  margin-bottom: var(--space-1);
+  font-weight: 600;
+  margin-bottom: var(--space-3);
 }
 
-.bench-card-latency {
-  font-size: var(--font-size-xs);
-  color: var(--color-grey);
-  font-family: var(--font-family-mono);
-}
+.bench-card-stats { display: flex; justify-content: center; gap: var(--space-6); }
+.bench-stat { display: flex; flex-direction: column; align-items: center; }
+.bench-stat-value { font-size: 2rem; font-weight: 700; color: var(--color-white); }
+.bench-stat-label { font-size: var(--font-size-xs); color: var(--color-grey); }
 
 .bench-loading {
   color: var(--color-grey);
