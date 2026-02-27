@@ -15,7 +15,7 @@ export default function Home({ onGetStarted }: HomeProps) {
             alt="Yeti Platform Architecture"
             className="hero-logo"
           />
-          <h1 className="hero-title">Distributed Rust Apps + Data<br />Optimized For Agentic Development</h1>
+          <h1 className="hero-title">Distributed Rust + Apps + Data<br />Optimized For Agentic Development</h1>
           <p className="hero-subtitle">
             Ship production APIs in minutes. Scale without rewriting.
           </p>
