@@ -513,6 +513,64 @@ code {
 .demo-card-name { font-size: var(--font-size-base); font-weight: 600; margin-bottom: var(--space-2); }
 .demo-card-desc { font-size: var(--font-size-sm); color: var(--color-grey); line-height: 1.5; }
 
+/* ===== Benchmark Cards (read-only grid) ===== */
+
+.bench-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: var(--space-4);
+  margin: var(--space-8) 0;
+}
+
+.bench-card {
+  background: var(--color-white-overlay);
+  border: 1px solid var(--color-border-primary);
+  border-radius: var(--radius-lg);
+  padding: var(--space-6);
+  text-align: center;
+}
+
+.bench-card-value {
+  font-size: var(--font-size-3xl);
+  font-weight: 200;
+  color: #ffffff;
+  font-family: var(--font-family-mono);
+  line-height: 1.1;
+}
+
+.bench-card-unit {
+  font-size: var(--font-size-xs);
+  color: var(--color-grey);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-bottom: var(--space-3);
+}
+
+.bench-card-name {
+  font-size: var(--font-size-sm);
+  color: var(--color-white);
+  font-weight: 500;
+  margin-bottom: var(--space-1);
+}
+
+.bench-card-latency {
+  font-size: var(--font-size-xs);
+  color: var(--color-grey);
+  font-family: var(--font-family-mono);
+}
+
+.bench-loading {
+  color: var(--color-grey);
+  text-align: center;
+  padding: var(--space-8);
+}
+
+.bench-error {
+  color: var(--color-error);
+  text-align: center;
+  padding: var(--space-8);
+}
+
 /* ===== Responsive ===== */
 
 @media (max-width: 1024px) {
