@@ -111,14 +111,14 @@ a:hover {
 }
 
 .btn-primary {
-  background: rgba(255, 0, 255, 0.2);
-  border-color: rgba(255, 0, 255, 0.15);
+  background: var(--color-primary);
+  border-color: var(--color-primary);
   color: #ffffff;
 }
 
 .btn-primary:hover {
-  background: rgba(255, 0, 255, 0.35);
-  border-color: rgba(255, 0, 255, 0.25);
+  background: color-mix(in srgb, var(--color-primary) 85%, white);
+  border-color: color-mix(in srgb, var(--color-primary) 85%, white);
   color: #ffffff;
 }
 

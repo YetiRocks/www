@@ -18,10 +18,34 @@ export default function Platform() {
       />*/}
 
       <section className="section">
+        <div className="section-label">Agents</div>
+        <h2 className="section-title">Designed For Agent-Driven Development</h2>
+        <p className="section-desc">
+          Yeti exposes every table as REST, GraphQL, SSE, and WebSocket endpoints with consistent naming and filtering. Connect an MCP-compatible agent - Claude, Cursor, Copilot - and it introspects your schema, queries data, and builds applications through a standardized protocol. Agents understand your application's structure the same way expert developers do.
+        </p>
+        <div className="features-grid">
+          <div className="feature-card">
+            <Icon name="brain" />
+            <div className="feature-title">Built-In MCP Server</div>
+            <div className="feature-text">
+              Every Yeti instance includes a Model Context Protocol server. Connect any MCP-compatible agent and it gets deep understanding of the platform - architecture, APIs, constraints, and installed applications. Agents query a semantic knowledge base to build and maintain apps with full context.
+            </div>
+          </div>
+          <div className="feature-card">
+            <Icon name="layers" />
+            <div className="feature-title">Guided Skills System</div>
+            <div className="feature-text">
+              Pre-built multi-step workflows guide agents through common tasks: creating applications, adding authentication, setting up vector search, migrating from other platforms. Agents follow proven patterns with full context at every step.
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section className="section">
         <div className="section-label">Applications</div>
         <h2 className="section-title">Declare, Don't Code</h2>
         <p className="section-desc">
-          Applications are directories with three files: a GraphQL schema, a YAML config, and optional Rust code. Drop them into the applications folder. Yeti loads them automatically, hot-reloads code changes, and compiles everything on save — no restart required.
+          Applications are directories with three files: a GraphQL schema, a YAML config, and optional Rust code. Drop them into the applications folder. Yeti loads them automatically, hot-reloads code changes, and compiles everything on save. No restart required.
         </p>
         <div className="features-grid">
           <div className="feature-card">
@@ -56,7 +80,7 @@ resource!(Greeting {
             <Icon name="browser" />
             <div className="feature-title">Static Files</div>
             <div className="feature-text">
-              Bundle a React, Vue, or any frontend framework alongside your API. Configure a static files directory and Yeti will build and serve it with proper caching headers and SPA fallback.
+              Bundle a React, Vue, or any frontend framework alongside your API. Configure a static files directory and Yeti builds and serves it with proper caching headers and SPA fallback.
             </div>
             <Code label="config.yaml">{`static_files:
   path: web
@@ -94,14 +118,14 @@ applications:
         <div className="section-label">Data</div>
         <h2 className="section-title">Two Storage Engines. One API. Unlimited Scale.</h2>
         <p className="section-desc">
-          Yeti offers two types of persistence: An ACID-compliant database with NoSQL and FIQL query capabilities, and a streaming message queue capable of scaling to 200+ million writes per second for high-throughput event pipelines. Same schema, same API surface- choose the backend that matches your access pattern.
+          Yeti offers two types of persistence: an ACID-compliant database with NoSQL and FIQL query capabilities, and a streaming message queue capable of scaling to 200+ million writes per second for high-throughput event pipelines. Same schema, same API surface - choose the backend that matches your access pattern.
         </p>
         <div className="features-grid">
           <div className="feature-card">
             <Icon name="database" />
             <div className="feature-title">ACID Database</div>
             <div className="feature-text">
-              Globally-replicated, eventually-consistent, ACID-compliant-at-the-node. Built on top of RocksDB, Yeti scales horizontally across regions with configurable replication and conflict resolution.
+              Globally replicated, eventually consistent, ACID compliant at the node. Built on RocksDB, Yeti scales horizontally across regions with configurable replication and conflict resolution.
             </div>
           </div>
           <div className="feature-card">
@@ -125,7 +149,7 @@ applications:
             <Icon name="link" />
             <div className="feature-title">Declarative Relationships</div>
             <div className="feature-text">
-              Declare relationships with <code>@relationship</code> directives- Yeti
+              Declare relationships with <code>@relationship</code> directives - Yeti
               resolves joins automatically in REST and GraphQL.
 
               <Code label="schema.graphql">{`type Author @table @export {
@@ -200,9 +224,9 @@ type Book @table @export {
         <div className="section-label">Interfaces</div>
         <h2 className="section-title">Modern Interfaces Included</h2>
         <p className="section-desc">
-          Every table change emits a PubSub event. Subscribe via Server-Sent Events or WebSocket
-          to receive live updates with zero configuration. Build dashboards, chat systems, and
-          collaborative tools with native real-time support.
+          Every table change emits a PubSub event. Subscribe via Server-Sent Events, WebSocket,
+          MQTT, or MCP to receive live updates with zero configuration. Build dashboards, chat
+          systems, AI agents, and collaborative tools with native real-time support.
         </p>
         <div className="features-grid">
           <div className="feature-card">
@@ -221,6 +245,24 @@ type Book @table @export {
               Full WebSocket support for bidirectional communication. Internal PubSub bus
               coordinates events across tables, extensions, and connected clients with
               topic-based routing.
+            </div>
+          </div>
+          <div className="feature-card">
+            <Icon name="broadcast" />
+            <div className="feature-title">MQTT Broker</div>
+            <div className="feature-text">
+              Built-in MQTT broker with native MQTTS on port 8883 and WebSocket proxy
+              at <code>/mqtt</code>. Publish and subscribe to table changes over standard
+              MQTT topics with integrated authentication.
+            </div>
+          </div>
+          <div className="feature-card">
+            <Icon name="cpu" />
+            <div className="feature-title">MCP Server</div>
+            <div className="feature-text">
+              Model Context Protocol support lets AI agents discover and interact with
+              your tables and resources as tools. Connect Claude, GPT, or any MCP-compatible
+              client directly to your application.
             </div>
           </div>
         </div>

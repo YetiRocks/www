@@ -23,6 +23,11 @@ const routes: RouteMeta[] = [
     description: 'Maximum performance, zero learning curve. Agent-friendly building blocks that look like NodeJS but run like Rust.',
   },
   {
+    path: '/fabric',
+    title: 'Fabric | Yeti',
+    description: 'Multi-region hosting platform. Deploy globally, scale automatically, and manage environments from dev to production.',
+  },
+  {
     path: '/demos',
     title: 'Demos | Yeti',
     description: 'Interactive examples: REST APIs, GraphQL, real-time streaming, vector search, and authentication — all powered by Yeti.',

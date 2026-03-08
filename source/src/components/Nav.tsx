@@ -23,6 +23,9 @@ export default function Nav({ onGetStarted }: NavProps) {
           <NavLink to="/platform" className={({ isActive }) => `nav-link${isActive ? ' active' : ''}`}>
             Platform
           </NavLink>
+          <NavLink to="/fabric" className={({ isActive }) => `nav-link${isActive ? ' active' : ''}`}>
+            Fabric
+          </NavLink>
           <NavLink to="/demos" className={({ isActive }) => `nav-link${isActive ? ' active' : ''}`}>
             Demos
           </NavLink>
@@ -47,6 +50,9 @@ export default function Nav({ onGetStarted }: NavProps) {
         </NavLink>
         <NavLink to="/platform" className="nav-link" onClick={() => setMobileOpen(false)}>
           Platform
+        </NavLink>
+        <NavLink to="/fabric" className="nav-link" onClick={() => setMobileOpen(false)}>
+          Fabric
         </NavLink>
         <NavLink to="/demos" className="nav-link" onClick={() => setMobileOpen(false)}>
           Demos
