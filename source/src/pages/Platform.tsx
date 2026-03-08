@@ -45,7 +45,7 @@ export default function Platform() {
               For custom logic beyond CRUD, add a resource file. Yeti compiles it to a native dynamic library and hot-reloads on every save. Full access to the request context, storage backends, and extension APIs.
             </div>
             <Code label="greeting.rs">{`/// Import Yeti's JS-like abstractions (!)
-use yeti_core::prelude::*;
+use yeti_sdk::prelude::*;
 
 /// Simple custom resource using concise syntax
 resource!(Greeting {

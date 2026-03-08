@@ -12,9 +12,6 @@ route_prefix: "/"
 schemas:
   - schemas/schema.graphql
 
-resources:
-  - resources/*.rs
-
 static_files:
   path: web
   route: /

@@ -8,7 +8,7 @@ const schemaExample = `type Product @table @export {
     inStock: Boolean!
 }`
 
-const resourceExample = `use yeti_core::prelude::*;
+const resourceExample = `use yeti_sdk::prelude::*;
 
 /// Simple greeting resource using Harper-like concise syntax
 resource!(Greeting {
