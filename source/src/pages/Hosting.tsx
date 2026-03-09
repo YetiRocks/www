@@ -1,12 +1,12 @@
 import Icon from '../components/Icon'
 
-export default function Fabric() {
+export default function Hosting() {
   return (
     <div className="container">
       <div className="page-header">
-        <h1 className="page-title">Deploy Globally.<br/>Scale Automatically.</h1>
+        <h1 className="page-title">One Click To Deploy. Zero Other Clicks.</h1>
         <p className="page-subtitle">
-          Yeti Fabric is a multi-region hosting platform that takes your app from localhost to worldwide in one command.
+          Yeti Cloud is a distributed application and data fabric that takes your app from localhost to worldwide in one command.
         </p>
       </div>
 
@@ -14,7 +14,7 @@ export default function Fabric() {
         <div className="section-label">Infrastructure</div>
         <h2 className="section-title">Built For Global Scale</h2>
         <p className="section-desc">
-          Yeti Fabric separates compute from storage. Your applications run as stateless containers on Kubernetes while data lives in a dedicated distributed storage cluster. Every region holds a complete copy of all data, replicated automatically. New pods start in milliseconds with immediate access. No data migration, no warm-up period.
+          Yeti Cloud separates compute from storage. Your applications run as stateless containers on Kubernetes while data lives in a dedicated distributed storage cluster. Every region holds a complete copy of all data, replicated automatically. New pods start in milliseconds with immediate access. No data migration, no warm-up period.
         </p>
         <div className="features-grid">
           <div className="feature-card">
@@ -38,7 +38,7 @@ export default function Fabric() {
         <div className="section-label">Regions</div>
         <h2 className="section-title">Multi-Region By Default</h2>
         <p className="section-desc">
-          Every Fabric deployment spans multiple geographic regions with Akamai GTM routing users to the nearest one. Data replicates across regions via change data capture over encrypted WireGuard tunnels. Your users get local latency regardless of where they are.
+          Every Yeti Cloud deployment spans multiple geographic regions with Akamai GTM routing users to the nearest one. Data replicates across regions via change data capture over encrypted WireGuard tunnels. Your users get local latency regardless of where they are.
         </p>
         <div className="features-grid">
           <div className="feature-card">
@@ -62,7 +62,7 @@ export default function Fabric() {
         <div className="section-label">Environments</div>
         <h2 className="section-title">Dev, Stage, Production - One Platform</h2>
         <p className="section-desc">
-          Fabric manages your application lifecycle from development through production. Push to a branch and get a staging environment. Merge to main and promote to production. Each environment is fully isolated with its own data, secrets, and custom domains.
+          Yeti Cloud manages your application lifecycle from development through production. Push to a branch and get a staging environment. Merge to main and promote to production. Each environment is fully isolated with its own data, secrets, and custom domains.
         </p>
         <div className="features-grid">
           <div className="feature-card">
@@ -86,7 +86,7 @@ export default function Fabric() {
         <div className="section-label">Operations</div>
         <h2 className="section-title">Zero-Ops Infrastructure</h2>
         <p className="section-desc">
-          Fabric handles provisioning, scaling, monitoring, and recovery so you don't have to. Auto-scaling adjusts compute capacity based on load. Built-in telemetry exports to your preferred observability stack. You ship features. Fabric runs them.
+          Yeti Cloud handles provisioning, scaling, monitoring, and recovery so you don't have to. Auto-scaling adjusts compute capacity based on load. Built-in telemetry exports to your preferred observability stack. You ship features. Yeti Cloud runs them.
         </p>
         <div className="features-grid">
           <div className="feature-card">

@@ -6,7 +6,7 @@ import BetaModal from './components/BetaModal'
 import Home from './pages/Home'
 import Platform from './pages/Platform'
 import Demos from './pages/Demos'
-import Fabric from './pages/Fabric'
+import Hosting from './pages/Hosting'
 import Benchmarks from './pages/Benchmarks'
 
 function ScrollToTop() {
@@ -30,7 +30,7 @@ export default function App() {
           <Routes>
             <Route path="/" element={<Home onGetStarted={() => setShowModal(true)} />} />
             <Route path="/platform" element={<Platform />} />
-            <Route path="/fabric" element={<Fabric />} />
+            <Route path="/hosting" element={<Hosting />} />
             <Route path="/demos" element={<Demos />} />
             <Route path="/benchmarks" element={<Benchmarks />} />
           </Routes>

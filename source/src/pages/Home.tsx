@@ -113,7 +113,7 @@ export default function Home({ onGetStarted }: HomeProps) {
           <div className="section-label">CHEAPER</div>
           <h2 className="section-title">Do More With Less</h2>
           <p className="section-desc">
-            Rust's efficiency means a single Yeti instance replaces a cluster of Node.js servers. Fewer servers, fewer services, fewer engineers to keep the lights on. When you're ready to go global, Yeti Fabric's pay-as-you-go pricing scales with your actual usage, not your worst-case capacity plan.
+            Rust's efficiency means a single Yeti instance replaces a cluster of Node.js servers. Fewer servers, fewer services, fewer engineers to keep the lights on. When you're ready to go global, Yeti Cloud's pay-as-you-go pricing scales with your actual usage, not your worst-case capacity plan.
           </p>
           <div className="features-grid">
             <div className="feature-card">
@@ -127,7 +127,7 @@ export default function Home({ onGetStarted }: HomeProps) {
               <Icon name="globe" />
               <div className="feature-title">Pay As You Grow</div>
               <div className="feature-text">
-                Yeti Fabric charges for the compute and storage you actually use. No reserved instances, no minimum commits, no surprise egress fees. Start on a single region for pennies. Scale to multi-region global deployment as your traffic grows. Your bill tracks your revenue, not your anxiety.
+                Yeti Cloud charges for the compute and storage you actually use. No reserved instances, no minimum commits, no surprise egress fees. Start on a single region for pennies. Scale to multi-region global deployment as your traffic grows. Your bill tracks your revenue, not your anxiety.
               </div>
             </div>
           </div>

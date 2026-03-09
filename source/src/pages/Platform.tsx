@@ -5,7 +5,7 @@ export default function Platform() {
   return (
     <div className="container">
       <div className="page-header">
-        <h1 className="page-title">Maximum Performance.<br/>Zero Learning Curve.</h1>
+        <h1 className="page-title">Faaster Applications, Faster.</h1>
         <p className="page-subtitle">
           Agent-friendly building blocks that look like NodeJS, but run like Rust.
         </p>

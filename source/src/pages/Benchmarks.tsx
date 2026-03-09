@@ -135,7 +135,7 @@ export default function Benchmarks() {
   const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
-    fetch('/admin/bestresults')
+    fetch('/yeti-benchmarks/bestresults')
       .then(res => {
         if (!res.ok) throw new Error(`${res.status}`)
         return res.json()
@@ -169,7 +169,7 @@ export default function Benchmarks() {
   return (
     <div className="container">
       <div className="page-header">
-        <h1 className="page-title">Sustained Performance at p99.9</h1>
+        <h1 className="page-title">Benchmarks, not Bullshit</h1>
         <p className="page-subtitle">
           Real-time results from a single Yeti node. No caching layer, no read replicas, no load balancer.
         </p>

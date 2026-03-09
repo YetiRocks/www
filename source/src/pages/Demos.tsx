@@ -14,7 +14,7 @@ export default function Demos() {
   return (
     <div className="container">
       <div className="page-header">
-        <h1 className="page-title">Demos</h1>
+        <h1 className="page-title">Sit. Speak. Roll Over. Good Boy.</h1>
         <p className="page-subtitle">
           Interactive examples showing what you can build with Yeti.<br />Each demo runs as a standalone application.
         </p>

@@ -23,11 +23,14 @@ export default function Nav({ onGetStarted }: NavProps) {
           <NavLink to="/platform" className={({ isActive }) => `nav-link${isActive ? ' active' : ''}`}>
             Platform
           </NavLink>
-          <NavLink to="/fabric" className={({ isActive }) => `nav-link${isActive ? ' active' : ''}`}>
-            Fabric
+          <NavLink to="/hosting" className={({ isActive }) => `nav-link${isActive ? ' active' : ''}`}>
+            Hosting
           </NavLink>
           <NavLink to="/demos" className={({ isActive }) => `nav-link${isActive ? ' active' : ''}`}>
             Demos
+          </NavLink>
+          <NavLink to="/benchmarks" className={({ isActive }) => `nav-link${isActive ? ' active' : ''}`}>
+            Benchmarks
           </NavLink>
           <a href="/documentation/" target="_blank" rel="noopener noreferrer" className="nav-link">Documentation</a>
         </div>
@@ -51,11 +54,14 @@ export default function Nav({ onGetStarted }: NavProps) {
         <NavLink to="/platform" className="nav-link" onClick={() => setMobileOpen(false)}>
           Platform
         </NavLink>
-        <NavLink to="/fabric" className="nav-link" onClick={() => setMobileOpen(false)}>
-          Fabric
+        <NavLink to="/hosting" className="nav-link" onClick={() => setMobileOpen(false)}>
+          Hosting
         </NavLink>
         <NavLink to="/demos" className="nav-link" onClick={() => setMobileOpen(false)}>
           Demos
+        </NavLink>
+        <NavLink to="/benchmarks" className="nav-link" onClick={() => setMobileOpen(false)}>
+          Benchmarks
         </NavLink>
         <a href="/documentation/" target="_blank" rel="noopener noreferrer" className="nav-link" onClick={() => setMobileOpen(false)}>
           Documentation
