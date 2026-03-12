@@ -8,6 +8,7 @@ import Platform from './pages/Platform'
 import Demos from './pages/Demos'
 import Hosting from './pages/Hosting'
 import Benchmarks from './pages/Benchmarks'
+import Legal from './pages/Legal'
 
 function ScrollToTop() {
   const { pathname } = useLocation()
@@ -30,9 +31,10 @@ export default function App() {
           <Routes>
             <Route path="/" element={<Home onGetStarted={() => setShowModal(true)} />} />
             <Route path="/platform" element={<Platform />} />
-            <Route path="/hosting" element={<Hosting />} />
+            <Route path="/cloud" element={<Hosting />} />
             <Route path="/demos" element={<Demos />} />
             <Route path="/benchmarks" element={<Benchmarks />} />
+            <Route path="/legal" element={<Legal />} />
           </Routes>
           <Footer />
         </main>

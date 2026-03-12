@@ -23,8 +23,8 @@ export default function Nav({ onGetStarted }: NavProps) {
           <NavLink to="/platform" className={({ isActive }) => `nav-link${isActive ? ' active' : ''}`}>
             Platform
           </NavLink>
-          <NavLink to="/hosting" className={({ isActive }) => `nav-link${isActive ? ' active' : ''}`}>
-            Hosting
+          <NavLink to="/cloud" className={({ isActive }) => `nav-link${isActive ? ' active' : ''}`}>
+            Cloud
           </NavLink>
           <NavLink to="/demos" className={({ isActive }) => `nav-link${isActive ? ' active' : ''}`}>
             Demos
@@ -32,7 +32,7 @@ export default function Nav({ onGetStarted }: NavProps) {
           <NavLink to="/benchmarks" className={({ isActive }) => `nav-link${isActive ? ' active' : ''}`}>
             Benchmarks
           </NavLink>
-          <a href="/documentation/" target="_blank" rel="noopener noreferrer" className="nav-link">Documentation</a>
+          <a href="/documentation/" target="_blank" rel="noopener noreferrer" className="nav-link">Docs</a>
         </div>
         <div className="nav-right">
           <button className="btn btn-primary" onClick={onGetStarted}>
@@ -54,8 +54,8 @@ export default function Nav({ onGetStarted }: NavProps) {
         <NavLink to="/platform" className="nav-link" onClick={() => setMobileOpen(false)}>
           Platform
         </NavLink>
-        <NavLink to="/hosting" className="nav-link" onClick={() => setMobileOpen(false)}>
-          Hosting
+        <NavLink to="/cloud" className="nav-link" onClick={() => setMobileOpen(false)}>
+          Cloud
         </NavLink>
         <NavLink to="/demos" className="nav-link" onClick={() => setMobileOpen(false)}>
           Demos
@@ -64,7 +64,7 @@ export default function Nav({ onGetStarted }: NavProps) {
           Benchmarks
         </NavLink>
         <a href="/documentation/" target="_blank" rel="noopener noreferrer" className="nav-link" onClick={() => setMobileOpen(false)}>
-          Documentation
+          Docs
         </a>
         <button className="btn btn-primary nav-mobile-cta" onClick={() => { setMobileOpen(false); onGetStarted(); }}>
           Get Started

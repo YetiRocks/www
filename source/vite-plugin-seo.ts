@@ -23,9 +23,9 @@ const routes: RouteMeta[] = [
     description: 'Maximum performance, zero learning curve. Agent-friendly building blocks that look like NodeJS but run like Rust.',
   },
   {
-    path: '/hosting',
-    title: 'Hosting | Yeti',
-    description: 'Multi-region hosting platform. Deploy globally, scale automatically, and manage environments from dev to production.',
+    path: '/cloud',
+    title: 'Cloud | Yeti',
+    description: 'Multi-region cloud platform. Deploy globally, scale automatically, and manage environments from dev to production.',
   },
   {
     path: '/demos',
@@ -36,6 +36,11 @@ const routes: RouteMeta[] = [
     path: '/benchmarks',
     title: 'Benchmarks | Yeti',
     description: 'Performance benchmarks: 77K req/s REST, sub-millisecond p50 latency, 3ms vector search across Yeti\'s API surface.',
+  },
+  {
+    path: '/legal',
+    title: 'Legal | Yeti',
+    description: 'Policies and legal documents for Yeti software and Yeti Cloud, including terms of service, privacy policy, and software license.',
   },
 ]
 
