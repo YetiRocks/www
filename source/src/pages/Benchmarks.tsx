@@ -122,7 +122,7 @@ const WORKLOADS: WorkloadGroup[] = [
     id: 'blob',
     description: 'Retrieval of 150 KB binary payloads through the REST interface.',
     tests: [
-      { id: 'blob-retrieval', name: '150 KB Blob Retrieval' },
+      { id: 'blob-retrieval', name: '150k Blob Retrieval' },
     ],
   },
 ]
