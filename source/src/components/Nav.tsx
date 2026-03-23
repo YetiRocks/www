@@ -64,9 +64,9 @@ export default function Nav({ onGetStarted }: NavProps) {
           <NavLink to="/demos" className={({ isActive }) => `nav-link${isActive ? ' active' : ''}`}>
             Demos
           </NavLink>
-          <NavLink to="/benchmarks" className={({ isActive }) => `nav-link${isActive ? ' active' : ''}`}>
+          {/*<NavLink to="/benchmarks" className={({ isActive }) => `nav-link${isActive ? ' active' : ''}`}>
             Benchmarks
-          </NavLink>
+          </NavLink>*/}
           <a href="/documentation/" target="_blank" rel="noopener noreferrer" className="nav-link">Docs</a>
         </div>
         <div className="nav-right">
@@ -109,9 +109,9 @@ export default function Nav({ onGetStarted }: NavProps) {
         <NavLink to="/demos" className="nav-link" onClick={() => setMobileOpen(false)}>
           Demos
         </NavLink>
-        <NavLink to="/benchmarks" className="nav-link" onClick={() => setMobileOpen(false)}>
+        {/*<NavLink to="/benchmarks" className="nav-link" onClick={() => setMobileOpen(false)}>
           Benchmarks
-        </NavLink>
+        </NavLink>*/}
         <a href="/documentation/" target="_blank" rel="noopener noreferrer" className="nav-link" onClick={() => setMobileOpen(false)}>
           Docs
         </a>
