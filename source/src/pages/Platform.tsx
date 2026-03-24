@@ -5,31 +5,31 @@ export default function Platform() {
   return (
     <div className="container">
       <div className="page-header">
-        <h1 className="page-title">Faster Applications, Faster.</h1>
+        <h1 className="page-title">Stack In A Box.</h1>
         <p className="page-subtitle">
-          Agent-friendly building blocks that look like NodeJS, but run like Rust.
+          REST, GraphQL, WebSocket, SSE, MQTT, MCP, gRPC - every interface your clients and devices speak. Plus embedded storage, auth, vector search, observability, and a static file server with build pipelines and SPA support. One runtime. Here's what's inside.
         </p>
       </div>
 
       <section className="section">
         <div className="section-label">Agents</div>
-        <h2 className="section-title">Designed For Agent-Driven Development</h2>
+        <h2 className="section-title">Your AI agent's favorite backend</h2>
         <p className="section-desc">
-          Every table gets REST, GraphQL, SSE, and WebSocket endpoints with consistent naming and filtering. Connect an MCP-compatible agent - Claude, Cursor, Copilot - and it introspects your schema, queries live data, and builds applications through a standardized protocol. Agents understand your app the same way a senior developer would.
+          Every table gets REST, GraphQL, SSE, and WebSocket endpoints with consistent naming and filtering. Connect an MCP-compatible agent and it introspects your schema, queries live data, and builds applications through a standardized protocol. Agents understand your app the way a senior developer would.
         </p>
         <div className="features-grid">
           <div className="feature-card">
             <Icon name="brain" />
-            <div className="feature-title">Built-In MCP Server</div>
+            <div className="feature-title">Built-in MCP Server</div>
             <div className="feature-text">
-              Every Yeti instance ships with a Model Context Protocol server. Connect any MCP-compatible agent and it gets deep platform context - architecture, APIs, constraints, and your installed applications. Agents query a semantic knowledge base to build and maintain apps with full context.
+              Every Yeti instance ships with a Model Context Protocol server. Connect Claude, Cursor, Copilot, or any MCP-compatible agent and it gets full platform context - your schemas, APIs, constraints, and installed applications. Agents query a semantic knowledge base to build and maintain apps with complete context.
             </div>
           </div>
           <div className="feature-card">
             <Icon name="layers" />
             <div className="feature-title">Guided Skills System</div>
             <div className="feature-text">
-              Pre-built multi-step workflows guide agents through common tasks: creating applications, adding authentication, setting up vector search, migrating from other platforms. Agents follow proven patterns with full context at every step.
+              Pre-built workflows guide agents through common tasks: creating applications, adding authentication, setting up vector search, migrating from other platforms. Agents follow proven patterns with full context at every step.
             </div>
           </div>
         </div>
@@ -37,16 +37,16 @@ export default function Platform() {
 
       <section className="section">
         <div className="section-label">Applications</div>
-        <h2 className="section-title">Declare, Don't Code</h2>
+        <h2 className="section-title">Declare what you need. Skip the boilerplate.</h2>
         <p className="section-desc">
-          An application is a directory with three files: a GraphQL schema, a YAML config, and optional Rust code. Drop it into the applications folder. Yeti picks it up, hot-reloads code changes, and compiles on save. No restart needed.
+          An application is a directory with three files: a GraphQL schema, a YAML config, and optional Rust code. Drop it into the applications folder and Yeti picks it up. Code changes hot-reload on save. No restart needed.
         </p>
         <div className="features-grid">
           <div className="feature-card">
             <Icon name="file-text" />
-            <div className="feature-title">Declarative Configuration</div>
+            <div className="feature-title">Schema-Driven APIs</div>
             <div className="feature-text">
-              Define your data model in GraphQL with custom directives for tables, indexes, relationships, and export paths. Yeti generates CRUD operations, query filtering, pagination, and real-time subscriptions from that schema.
+              Define your data model in GraphQL with custom directives for tables, indexes, relationships, and exports. Yeti generates CRUD operations, query filtering, pagination, and real-time subscriptions from that schema.
             </div>
             <Code label="schema.graphql">{`type Product @table @export {
     id: ID! @primaryKey
@@ -74,15 +74,11 @@ resource!(Greeting {
             <Icon name="browser" />
             <div className="feature-title">Static Files</div>
             <div className="feature-text">
-              Bundle a React, Vue, or any frontend alongside your API. Point Yeti at a static files directory and it serves with proper caching headers and SPA fallback.
+              Bundle a React, Vue, or any frontend alongside your API. Point Yeti at a directory and it serves with proper caching headers and SPA fallback.
             </div>
             <Code label="config.yaml">{`static_files:
   path: web
-  route: /
-  index: index.html
-  not_found:
-    file: index.html
-    status_code: 200
+  spa: true
   build:
     source_dir: source
     command: npm run build`}</Code>
@@ -91,7 +87,7 @@ resource!(Greeting {
             <Icon name="layers" />
             <div className="feature-title">Multi-App Composability</div>
             <div className="feature-text">
-              Each app runs in its own namespace with isolated storage, routing, and permissions. A single Yeti instance hosts dozens of applications, scaling each independently.
+              Each app runs in its own namespace with isolated storage, routing, and permissions. A single Yeti instance hosts dozens of applications, each scaling independently.
             </div>
             <Code label="config.yaml">{`environment: production
 rootDirectory: /opt/yeti
@@ -110,23 +106,23 @@ applications:
 
       <section className="section">
         <div className="section-label">Data</div>
-        <h2 className="section-title">Storage That Scales With You</h2>
+        <h2 className="section-title">Embedded storage that replicates globally</h2>
         <p className="section-desc">
-          Every table is backed by RocksDB with ACID compliance at the node and eventual consistency across the cluster. Define your schema, pick your consistency level, and Yeti handles replication, conflict resolution, and failover. One storage engine that works from a single laptop to a global fleet.
+          No external database to manage. No connection strings. No migration ceremony. Every table is backed by RocksDB with ACID compliance at the node and eventual consistency across the cluster. Define your schema, pick your consistency level, and Yeti handles replication, conflict resolution, and failover.
         </p>
         <div className="features-grid">
           <div className="feature-card">
             <Icon name="database" />
-            <div className="feature-title">Embedded and Distributed</div>
+            <div className="feature-title">Single Node to Global Fleet</div>
             <div className="feature-text">
-              Starts as a single-node embedded database. Add nodes and it replicates automatically via WAL shipping with hybrid logical clocks. No external database to manage. No connection strings. No migration ceremony. Your data just shows up on every node.
+              Starts as a single-node embedded database. Add nodes and it replicates automatically via WAL shipping with hybrid logical clocks. Your data just shows up on every node.
             </div>
           </div>
           <div className="feature-card">
             <Icon name="trending-up" />
             <div className="feature-title">Conflict Resolution Built In</div>
             <div className="feature-text">
-              Last-writer-wins by default with HLC timestamps. CRDTs for counters and sets when you need convergent math. Strong consistency mode for financial data. Pick per-table in your schema. The replication layer handles the rest.
+              Last-writer-wins by default with HLC timestamps. CRDTs for counters and sets. Strong consistency mode for financial data. Pick per-table in your schema. The replication layer handles the rest.
             </div>
           </div>
         </div>
@@ -134,9 +130,9 @@ applications:
 
       <section className="section">
         <div className="section-label">Vectors</div>
-        <h2 className="section-title">Fast, Dynamic, Composable Search</h2>
+        <h2 className="section-title">Semantic search without a second database</h2>
         <p className="section-desc">
-          Not all searches are the same. Yeti supports multi-table joins, full-text search, and vector search with auto-embedding. Combine any search type with logical operators for precision and speed.
+          Not all searches are the same. Yeti supports multi-table joins, full-text search, and vector search with auto-embedding. Combine any search type with logical operators for precision and speed. No Pinecone. No Elasticsearch. It runs in the same process as everything else.
         </p>
         <div className="features-grid">
           <div className="feature-card">
@@ -216,9 +212,9 @@ type Book @table @export {
 
       <section className="section">
         <div className="section-label">Interfaces</div>
-        <h2 className="section-title">Real-Time Out of the Box</h2>
+        <h2 className="section-title">REST, WebSocket, SSE, MQTT, GraphQL - all from the same schema</h2>
         <p className="section-desc">
-          Every table change fires a PubSub event. Subscribe via SSE, WebSocket, MQTT, or MCP to get live updates with zero config. Dashboards, chat, AI agents, collaborative tools - all natively real-time.
+          Every table change fires a PubSub event. Subscribe via SSE, WebSocket, MQTT, or MCP for live updates with zero config. Dashboards, chat, AI agents, IoT devices - all natively real-time.
         </p>
         <div className="features-grid">
           <div className="feature-card">
@@ -241,9 +237,9 @@ type Book @table @export {
           </div>
           <div className="feature-card">
             <Icon name="broadcast" />
-            <div className="feature-title">MQTT Broker</div>
+            <div className="feature-title">Native MQTT Broker</div>
             <div className="feature-text">
-              Built-in MQTT broker with native MQTTS on port 8883 and WebSocket proxy
+              No Mosquitto, no managed broker service. Built-in MQTT broker with native MQTTS on port 8883 and WebSocket proxy
               at <code>/mqtt</code>. Publish and subscribe to table changes over standard
               MQTT topics with integrated auth.
             </div>
@@ -262,7 +258,7 @@ type Book @table @export {
 
       <section className="section">
         <div className="section-label">Extensions</div>
-        <h2 className="section-title">Production Building Blocks</h2>
+        <h2 className="section-title">Auth, telemetry, and vectors ship with the binary</h2>
         <p className="section-desc">
           Extensions are shared services that apps opt into. Each one provides tables, API endpoints, and lifecycle hooks. Declare them in config.yaml and configure per-app behavior inline. Yeti ships with four built-in extensions and supports custom ones for specialized needs.
         </p>
@@ -275,6 +271,19 @@ type Book @table @export {
               password hashing, configurable token TTLs, email-pattern role mapping, CSRF
               protection, and per-attribute field-level permissions.
             </div>
+            <Code label="config.yaml">{`auth:
+  methods: [oauth, basic]
+  oauth:
+    google:
+      clientId: "\${GOOGLE_CLIENT_ID}"
+      clientSecret: "\${GOOGLE_CLIENT_SECRET}"
+    rules:
+      - strategy: email
+        pattern: "*@mycompany.com"
+        role: admin
+      - strategy: email
+        pattern: "*"
+        role: standard`}</Code>
           </div>
           <div className="feature-card">
             <Icon name="trending-up" />
@@ -296,10 +305,10 @@ type Book @table @export {
           </div>
           <div className="feature-card">
             <Icon name="monitor" />
-            <div className="feature-title">yeti-applications</div>
+            <div className="feature-title">yeti-admin</div>
             <div className="feature-text">
               Web-based app manager. Browse, create, edit, and delete applications
-              through a React UI. File browser, schema parsing, Git integration, and SSH
+              through a React UI. File browser, schema editor, Git integration, and SSH
               deploy key management.
             </div>
           </div>

@@ -1,162 +1,120 @@
 import Code from '../components/Code'
-
-const schemaExample = `type Product @table @export {
-    id: ID! @primaryKey
-    name: String!
-    price: Float!
-    category: String! @indexed
-    inStock: Boolean!
-}`
-
-const resourceExample = `use yeti_sdk::prelude::*;
-
-/// Simple greeting resource using concise syntax
-resource!(Greeting {
-    get => json!({"greeting": "Hello, World!"})
-});`
-
-const authExample = `auth:
-  methods: [oauth, basic]
-  oauth:
-    google:
-      clientId: "\${GOOGLE_CLIENT_ID}"
-      clientSecret: "\${GOOGLE_CLIENT_SECRET}"
-    rules:
-      - strategy: email
-        pattern: "*@mycompany.com"
-        role: admin
-      - strategy: email
-        pattern: "*"
-        role: standard`
-
-const vectorSchema = `type Article @table @export {
-    id: ID! @primaryKey
-    title: String!
-    content: String!
-    embedding: [Float!]! @indexed(type: "HNSW")
-}`
+import Icon from '../components/Icon'
+import { Link } from 'react-router-dom'
 
 export default function Applications() {
   return (
     <div className="container">
       <div className="page-header">
-        <h1 className="page-title">Composable Performance</h1>
+        <h1 className="page-title">Zero to production in four steps.</h1>
         <p className="page-subtitle">
-          Yeti applications run as native libraries - no serialization
-          boundaries, no interpreter tax. You get resource-stability and maximum performance.
+          A schema, a config file, and optionally some Rust. That's the whole application. Here's how it works from first file to live API.
         </p>
       </div>
 
       <section className="section">
-        <div className="section-label">Schema to API</div>
-        <h2 className="section-title">Define Once. Get Everything.</h2>
+        <div className="section-label">Step 1</div>
+        <h2 className="section-title">Define your data model</h2>
         <p className="section-desc">
-          Write a GraphQL schema with table directives. Yeti generates REST CRUD, GraphQL queries
-          and mutations, real-time subscriptions, FIQL filtering, pagination, field selection,
-          and relationship joins - automatically.
+          Write a GraphQL schema. Each type with <code>@table</code> becomes a stored table. Add <code>@export</code> and Yeti generates REST, GraphQL, and SSE endpoints automatically. Indexes, relationships, and vector fields are all declared inline.
         </p>
 
-        <Code label="schema.graphql">{schemaExample}</Code>
+        <Code label="schemas/schema.graphql">{`type Product @table @export {
+    id: ID! @primaryKey
+    name: String!
+    price: Float!
+    category: String! @indexed
+    inStock: Boolean!
+}
 
-        <div className="stats-grid stats-grid-3">
-          <div className="stat-card">
-            <div className="stat-value">REST</div>
-            <div className="stat-label">Auto-Generated</div>
-          </div>
-          <div className="stat-card">
-            <div className="stat-value">GraphQL</div>
-            <div className="stat-label">Auto-Generated</div>
-          </div>
-          <div className="stat-card">
-            <div className="stat-value">SSE</div>
-            <div className="stat-label">Auto-Generated</div>
-          </div>
-        </div>
+type Review @table @export {
+    id: ID! @primaryKey
+    productId: ID! @indexed
+    product: Product @relationship(from: "productId")
+    rating: Int!
+    body: String!
+    embedding: Vector @indexed(source: "body")
+}`}</Code>
       </section>
 
       <section className="section">
-        <div className="section-label">Custom Resources</div>
-        <h2 className="section-title">Rust That Looks Like Javascript</h2>
+        <div className="section-label">Step 2</div>
+        <h2 className="section-title">Configure your app</h2>
         <p className="section-desc">
-          Yeti's abstractions give you compiled, zero-overhead Rust without the pain. Write clean business logic that's easy to read and maintain.
+          A YAML file names the app, points to the schema, and declares which extensions to use. Auth, vector search, telemetry - each one is a few lines of config. No code to write for any of it.
         </p>
 
-        <Code label="greeting.rs">{resourceExample}</Code>
+        <Code label="config.yaml">{`name: "Product Catalog"
+app_id: "catalog"
+version: "1.0.0"
+route_prefix: /catalog
 
-        <div className="stats-grid stats-grid-3">
-          <div className="stat-card">
-            <div className="stat-value">Native</div>
-            <div className="stat-label">Compiled Rust</div>
-          </div>
-          <div className="stat-card">
-            <div className="stat-value">&lt;1s</div>
-            <div className="stat-label">Hot Reload</div>
-          </div>
-          <div className="stat-card">
-            <div className="stat-value">0</div>
-            <div className="stat-label">Boilerplate</div>
-          </div>
-        </div>
+schemas:
+  - schemas/schema.graphql
+
+auth:
+  methods: [jwt, basic]
+
+vectors:
+  model: "BAAI/bge-small-en-v1.5"
+
+static_files:
+  path: web
+  spa: true
+  build:
+    source_dir: frontend
+    command: npm run build`}</Code>
       </section>
 
       <section className="section">
-        <div className="section-label">Authentication</div>
-        <h2 className="section-title">Auth in Five Lines of Config</h2>
+        <div className="section-label">Step 3</div>
+        <h2 className="section-title">Add custom logic where you need it</h2>
         <p className="section-desc">
-          yeti-auth gives you Basic, JWT, and OAuth with role-based access control. Drop provider
-          credentials and role mapping rules into config.yaml. No auth code to write. Ever.
+          Most apps don't need custom code - the schema and config handle CRUD, auth, search, and streaming. When you do need business logic, write a resource file. It compiles to native Rust and hot-reloads on save.
         </p>
 
-        <Code label="config.yaml">{authExample}</Code>
+        <Code label="resources/featured.rs">{`use yeti_sdk::prelude::*;
 
-        <p className="section-desc">
-          JWT tokens ship with configurable TTLs. Role permissions control read, write,
-          and delete access per table, with optional field-level filtering. Argon2id
-          password hashing meets OWASP minimum parameters out of the box.
-        </p>
-
-        <div className="stats-grid stats-grid-3">
-          <div className="stat-card">
-            <div className="stat-value">3</div>
-            <div className="stat-label">Auth Strategies</div>
-          </div>
-          <div className="stat-card">
-            <div className="stat-value">RBAC</div>
-            <div className="stat-label">Per-Field Control</div>
-          </div>
-          <div className="stat-card">
-            <div className="stat-value">Argon2</div>
-            <div className="stat-label">OWASP Compliant</div>
-          </div>
-        </div>
+resource!(Featured {
+    get(request, ctx) => {
+        let products = ctx.get_table("Product")?;
+        let featured = products.query("inStock==true;price=gt=50")
+            .await?;
+        json!({"featured": featured, "count": featured.len()})
+    }
+});`}</Code>
       </section>
 
       <section className="section">
-        <div className="section-label">Vector Search</div>
-        <h2 className="section-title">Semantic Search in 3ms</h2>
+        <div className="section-label">Step 4</div>
+        <h2 className="section-title">Drop it in and go</h2>
         <p className="section-desc">
-          Add a vector index to any float array field. yeti-vectors automatically embeds text on
-          every insert and update using your choice of five models. A persistent embedding cache
-          skips redundant computation. Natural language search comes back in under 5ms.
+          Put your application directory in the Yeti applications folder. Yeti detects it, compiles any resources, builds your frontend, and starts serving. Push to GitHub and Yeti Cloud deploys it globally.
         </p>
 
-        <Code label="schema.graphql">{vectorSchema}</Code>
-
-        <div className="stats-grid stats-grid-3">
-          <div className="stat-card">
-            <div className="stat-value">5</div>
-            <div className="stat-label">Embedding Models</div>
+        <div className="features-grid">
+          <div className="feature-card">
+            <Icon name="bolt" />
+            <div className="feature-title">What you get</div>
+            <div className="feature-text">
+              REST CRUD for every table. GraphQL with queries, mutations, and subscriptions. SSE streams for real-time updates. FIQL filtering, pagination, field selection, and relationship joins. JWT and basic auth with RBAC. Vector search with auto-embedding. Telemetry with OTLP export. A built frontend served with SPA fallback. All from a schema, a config, and one resource file.
+            </div>
           </div>
-          <div className="stat-card">
-            <div className="stat-value">3ms</div>
-            <div className="stat-label">Cached Search</div>
-          </div>
-          <div className="stat-card">
-            <div className="stat-value">HNSW</div>
-            <div className="stat-label">Index Type</div>
+          <div className="feature-card">
+            <Icon name="layers" />
+            <div className="feature-title">What you didn't write</div>
+            <div className="feature-text">
+              No ORM. No migration scripts. No auth middleware. No WebSocket server. No search index. No build pipeline config. No Dockerfile. No Kubernetes manifest. No CI/CD workflow. No monitoring agent. Yeti handles all of it so you can focus on what makes your app different.
+            </div>
           </div>
         </div>
       </section>
+
+      <div className="section" style={{ textAlign: 'center', paddingBottom: '4rem' }}>
+        <p className="section-desc">
+          See the full list of platform capabilities on the <Link to="/platform">platform page</Link>, or try the <Link to="/demos">interactive demos</Link>.
+        </p>
+      </div>
     </div>
   )
 }

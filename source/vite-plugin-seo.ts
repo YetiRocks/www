@@ -14,18 +14,28 @@ interface RouteMeta {
 const routes: RouteMeta[] = [
   {
     path: '/',
-    title: 'Yeti | Distributed Rust + Apps + Data',
-    description: 'Schema-driven APIs, real-time streaming, and vector search powered by Rust. Ship production APIs in minutes.',
+    title: 'Yeti | One Server Where Ten Used To Be',
+    description: 'API server, message broker, vector database, auth service, monitoring stack - Yeti replaces all of them with a single binary.',
   },
   {
     path: '/platform',
     title: 'Platform | Yeti',
-    description: 'Maximum performance, zero learning curve. Agent-friendly building blocks that look like NodeJS but run like Rust.',
+    description: 'Stack in a box. REST, GraphQL, WebSocket, SSE, MQTT, MCP, gRPC, embedded storage, auth, vector search, and observability in one runtime.',
+  },
+  {
+    path: '/applications',
+    title: 'Applications | Yeti',
+    description: 'Zero to production in four steps. Define a schema, configure extensions, add custom logic, and deploy. No boilerplate.',
   },
   {
     path: '/cloud',
     title: 'Cloud | Yeti',
-    description: 'Multi-region cloud platform. Deploy globally, scale automatically, and manage environments from dev to production.',
+    description: 'Push to main. Deploy globally. Multi-region hosting across Linode, GCP, AWS, and Azure with automatic scaling and replication.',
+  },
+  {
+    path: '/use-cases',
+    title: 'Use Cases | Yeti',
+    description: 'High-throughput workloads: media security, ad networks, and industrial IoT. One server where ten used to be.',
   },
   {
     path: '/demos',
@@ -50,7 +60,7 @@ const JSON_LD_HOME = `
   "@context": "https://schema.org",
   "@type": "SoftwareApplication",
   "name": "Yeti",
-  "description": "Distributed Rust + Apps + Data platform. Schema-driven APIs, real-time streaming, and vector search powered by Rust.",
+  "description": "One server where ten used to be. API server, message broker, vector database, auth service, and monitoring stack in a single binary.",
   "url": "https://yetirocks.com",
   "applicationCategory": "DeveloperApplication",
   "operatingSystem": "Linux, macOS, Windows",

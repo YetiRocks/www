@@ -58,8 +58,14 @@ export default function Nav({ onGetStarted }: NavProps) {
           <NavLink to="/platform" className={({ isActive }) => `nav-link${isActive ? ' active' : ''}`}>
             Platform
           </NavLink>
+          <NavLink to="/applications" className={({ isActive }) => `nav-link${isActive ? ' active' : ''}`}>
+            Applications
+          </NavLink>
           <NavLink to="/cloud" className={({ isActive }) => `nav-link${isActive ? ' active' : ''}`}>
             Cloud
+          </NavLink>
+          <NavLink to="/use-cases" className={({ isActive }) => `nav-link${isActive ? ' active' : ''}`}>
+            Use Cases
           </NavLink>
           <NavLink to="/demos" className={({ isActive }) => `nav-link${isActive ? ' active' : ''}`}>
             Demos
@@ -103,8 +109,14 @@ export default function Nav({ onGetStarted }: NavProps) {
         <NavLink to="/platform" className="nav-link" onClick={() => setMobileOpen(false)}>
           Platform
         </NavLink>
+        <NavLink to="/applications" className="nav-link" onClick={() => setMobileOpen(false)}>
+          Applications
+        </NavLink>
         <NavLink to="/cloud" className="nav-link" onClick={() => setMobileOpen(false)}>
           Cloud
+        </NavLink>
+        <NavLink to="/use-cases" className="nav-link" onClick={() => setMobileOpen(false)}>
+          Use Cases
         </NavLink>
         <NavLink to="/demos" className="nav-link" onClick={() => setMobileOpen(false)}>
           Demos
