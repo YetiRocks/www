@@ -15,9 +15,9 @@ export default function Home({ onGetStarted }: HomeProps) {
             alt="Yeti Platform Architecture"
             className="hero-logo"
           />
-          <h1 className="hero-title">One server where ten used to be.</h1>
+          <h1 className="hero-title">Faster Applications, Faster.</h1>
           <p className="hero-subtitle">
-            API server, message broker, vector database, auth service, monitoring stack - Yeti replaces all of them with a single binary. Write a schema, add business logic, and deploy.
+            Yeti gives developers (and their agents) the building blocks to create high-performance, globally-distributed Rust apps in minutes, not months. <span className="nowrap">Move faster with Yeti.</span>
           </p>
           <div className="hero-actions">
             <button className="btn btn-primary btn-lg" onClick={onGetStarted}>

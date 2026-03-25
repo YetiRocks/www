@@ -293,23 +293,66 @@ type Book @table @export {
               Grafana, Datadog, or any OpenTelemetry collector. File rotation, real-time
               SSE streaming, and REST query API.
             </div>
+            <Code label="yeti-config.yaml">{`telemetry:
+  metrics: true
+  serviceName: my-service
+  otlpEndpoint: "http://otel-collector:4317"
+  metricsIntervalSecs: 10`}</Code>
           </div>
           <div className="feature-card">
             <Icon name="brain" />
             <div className="feature-title">yeti-vectors</div>
             <div className="feature-text">
-              Automatic text and image embedding on every insert and update. Five models
-              from BAAI and Sentence Transformers. Persistent embedding cache shared across
-              apps. HNSW vector indexing with configurable distance metrics.
+              Automatic embedding on every insert and update. 38 models available from
+              the admin panel. Persistent embedding cache shared across apps. HNSW
+              indexing with configurable distance metrics.
+            </div>
+            <div className="code-block">
+              <span className="code-label">models</span>
+              <pre style={{ margin: 0, padding: '1rem', background: 'transparent', color: '#d4d4d4', fontSize: '0.85rem', lineHeight: 1.7 }}>
+{[
+  ['  ', 'BAAI', 'bge-small-en-v1.5'],
+  ['  ', 'BAAI', 'bge-base-en-v1.5'],
+  ['  ', 'BAAI', 'bge-large-en-v1.5'],
+  ['  ', 'sentence-transformers', 'all-MiniLM-L6-v2'],
+  ['  ', 'nomic-ai', 'nomic-embed-text-v1.5'],
+  ['  ', 'intfloat', 'multilingual-e5-large'],
+  ['  ', 'Alibaba-NLP', 'gte-large-en-v1.5'],
+  ['  ', 'snowflake', 'snowflake-arctic-embed-l'],
+  ['▸ ', 'Qdrant', 'clip-ViT-B-32-vision'],
+].map(([prefix, provider, model], i) => (
+  <div key={i}>{prefix}{provider}/<span style={{ color: '#a8785a' }}>{model}</span></div>
+))}
+                <div style={{ color: '#6a9955' }}>{'  ...'}</div>
+              </pre>
             </div>
           </div>
           <div className="feature-card">
             <Icon name="monitor" />
             <div className="feature-title">yeti-admin</div>
             <div className="feature-text">
-              Web-based app manager. Browse, create, edit, and delete applications
-              through a React UI. File browser, schema editor, Git integration, and SSH
-              deploy key management.
+              Web-based app manager with 11 starter templates. Browse, create, edit, and
+              delete applications through a React UI. File browser, schema editor, Git
+              integration, and SSH deploy key management.
+            </div>
+            <div className="code-block">
+              <span className="code-label">templates</span>
+              <pre style={{ margin: 0, padding: '1rem', background: 'transparent', color: '#d4d4d4', fontSize: '0.85rem', lineHeight: 1.7 }}>
+{[
+  ['app', 'benchmarks'],
+  ['app', 'pagebank'],
+  ['app', 'redirector'],
+  ['demo', 'authentication'],
+  ['demo', 'basic'],
+  ['demo', 'fiql'],
+  ['demo', 'graphql'],
+  ['demo', 'kafka'],
+  ['demo', 'mcp'],
+].map(([prefix, name], i) => (
+  <div key={i}>{'  '}<span style={{ color: prefix === 'app' ? '#b8b07e' : '#569cd6' }}>{prefix}</span>-{name}</div>
+))}
+                <div style={{ color: '#6a9955' }}>{'  ...'}</div>
+              </pre>
             </div>
           </div>
         </div>
