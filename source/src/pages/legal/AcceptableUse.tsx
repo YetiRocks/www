@@ -134,7 +134,7 @@ export default function AcceptableUse() {
         </p>
         <ul>
           <li>Email: <a href="mailto:abuse@yetirocks.com">abuse@yetirocks.com</a></li>
-          <li>YetiRocks, LLC</li>
+          <li>YetiRocks, LLC, 1712 Pioneer Ave, Suite 500, Cheyenne, WY 82001</li>
         </ul>
         <p>
           We take all reports seriously and will investigate promptly. Please include as much detail

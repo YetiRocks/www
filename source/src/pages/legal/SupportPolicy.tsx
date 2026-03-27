@@ -155,7 +155,7 @@ export default function SupportPolicy() {
         <ul>
           <li>Email: <a href="mailto:support@yetirocks.com">support@yetirocks.com</a></li>
           <li>Documentation: <a href="https://docs.yetirocks.com" target="_blank" rel="noopener noreferrer">docs.yetirocks.com</a></li>
-          <li>YetiRocks, LLC</li>
+          <li>YetiRocks, LLC, 1712 Pioneer Ave, Suite 500, Cheyenne, WY 82001</li>
         </ul>
       </div>
     </div>

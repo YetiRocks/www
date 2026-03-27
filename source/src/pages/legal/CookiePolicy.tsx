@@ -106,7 +106,7 @@ export default function CookiePolicy() {
         </p>
         <ul>
           <li>Email: <a href="mailto:privacy@yetirocks.com">privacy@yetirocks.com</a></li>
-          <li>YetiRocks, LLC</li>
+          <li>YetiRocks, LLC, 1712 Pioneer Ave, Suite 500, Cheyenne, WY 82001</li>
         </ul>
         <p>
           For more information about how we handle your data, see our{' '}

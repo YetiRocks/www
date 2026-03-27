@@ -258,7 +258,7 @@ export default function SoftwareLicense() {
         <p>
           All notices under this Agreement shall be in writing and sent to the addresses specified in
           the applicable Order. Notices to Yeti shall be sent to: YetiRocks, LLC,
-          ;
+          1712 Pioneer Ave, Suite 500, Cheyenne, WY 82001;
           email: <a href="mailto:legal@yetirocks.com">legal@yetirocks.com</a>.
         </p>
 

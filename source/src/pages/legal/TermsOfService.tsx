@@ -342,7 +342,7 @@ export default function TermsOfService() {
           Questions about these terms should be directed to:{' '}
           <a href="mailto:legal@yetirocks.com">legal@yetirocks.com</a>
         </p>
-        <p>YetiRocks, LLC</p>
+        <p>YetiRocks, LLC<br />1712 Pioneer Ave, Suite 500<br />Cheyenne, WY 82001</p>
 
       </div>
     </div>
