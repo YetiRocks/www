@@ -9,10 +9,10 @@ export default function SupportPolicy() {
       </div>
       <div className="legal-content">
         <p>
-          This Support Policy describes the support services provided by YetiRocks, LLC, a Wyoming limited liability company,
-          C.V. ("Yeti", "we", "us", or "our"), located ,
-          to customers of the Yeti Cloud platform. This policy is incorporated into and
-          forms part of our <Link to="/legal/terms-of-service">Terms of Service</Link>.
+          This Support Policy describes the support services provided by YetiRocks, LLC
+          ("Yeti", "we", "us", or "our") to customers of the Yeti Cloud platform.
+          This policy is incorporated into and forms part of
+          our <Link to="/legal/terms-of-service">Terms of Service</Link>.
         </p>
 
         <h2>1. Overview</h2>

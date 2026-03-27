@@ -206,7 +206,7 @@ export default function SoftwareLicense() {
 
         <p>
           The Software may be subject to export control laws and regulations, including those of the
-          United States, Mexico, and other jurisdictions. Customer shall not export, re-export, or
+          United States and other applicable jurisdictions. Customer shall not export, re-export, or
           transfer the Software in violation of any applicable export control laws or regulations.
           Customer represents that it is not located in, under the control of, or a national or
           resident of any country or territory subject to comprehensive trade sanctions.
@@ -223,8 +223,8 @@ export default function SoftwareLicense() {
         <p>
           This Agreement shall be governed by and construed in accordance with the laws of the State of Wyoming,
           without regard to its conflict of laws provisions. Any disputes arising under this Agreement
-          shall be subject to the exclusive jurisdiction of the competent courts located in
-          Wyoming.
+          shall be subject to the exclusive jurisdiction of the state and federal courts located in
+          Laramie County, Wyoming.
         </p>
 
         <h3>10.2 Entire Agreement</h3>

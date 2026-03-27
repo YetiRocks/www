@@ -11,7 +11,7 @@ export default function AcceptableUse() {
         <p>
           This Acceptable Use Policy ("AUP") governs your use of the Yeti Cloud platform and
           related services provided by YetiRocks, LLC ("Yeti", "we", "us", or
-          "our"), located in . This AUP is incorporated
+          "our"). This AUP is incorporated
           into and forms part of our <Link to="/legal/terms-of-service">Terms of Service</Link>.
         </p>
 

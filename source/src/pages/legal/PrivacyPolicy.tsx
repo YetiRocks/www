@@ -9,16 +9,15 @@ export default function PrivacyPolicy() {
         <p>
           This Privacy Policy explains how we collect, use, share, and protect your personal data when you
           use the Yeti Cloud platform, visit our website at yetirocks.com, or interact with our services.
-          We comply with applicable U.S. privacy laws
-          (LFPDPPP) and, for users in the European Economic Area (EEA), the General Data Protection
-          Regulation (GDPR).
+          We comply with applicable U.S. privacy laws and, for users in the European Economic Area (EEA),
+          the General Data Protection Regulation (GDPR).
         </p>
 
         <h2>1. Who We Are</h2>
         <p>
           <strong>YetiRocks, LLC</strong> ("Yeti", "we", "us", or "our") is the data
-          controller responsible for your personal data. We are incorporated in Wyoming
-          .
+          controller responsible for your personal data. We are a limited liability company
+          incorporated in the state of Wyoming, United States.
         </p>
         <p>
           Data Protection Contact:{' '}
@@ -34,8 +33,8 @@ export default function PrivacyPolicy() {
         <h3>2.1 Account Information</h3>
         <p>
           When you create an account, we collect your name, email address, organization name, billing
-          address, and payment details. If you sign in via an OAuth provider (such as Google or GitHub),
-          we receive your name, email, and profile picture from that provider.
+          address, and payment details. If you sign in through an OAuth provider (such as Google or
+          GitHub), we receive your name, email, and profile picture from that provider.
         </p>
 
         <h3>2.2 Usage Data</h3>
@@ -61,7 +60,7 @@ export default function PrivacyPolicy() {
 
         <h3>2.5 Customer Data</h3>
         <p>
-          Data you store on Yeti Cloud is controlled by you. We process it only to deliver the Services
+          Data you store on Yeti Cloud belongs to you. We process it only to deliver the Services
           and never access it except for service delivery, troubleshooting, or as required by law.
         </p>
         <p className="legal-tip">
@@ -77,24 +76,24 @@ export default function PrivacyPolicy() {
           <li>Respond to support requests and communicate with you about your account</li>
           <li>Monitor and analyze usage trends to improve the platform</li>
           <li>Detect, prevent, and address security threats and technical issues</li>
-          <li>Comply with legal obligations under Mexican and applicable international law</li>
+          <li>Comply with applicable U.S. and international law</li>
           <li>Send product updates and announcements (you may opt out at any time)</li>
         </ul>
         <p className="legal-tip">
           <strong>What this means:</strong> We use your data to run the service, make it better, keep
-          it secure, and stay in touch. We never use it for advertising or selling to third parties.
+          it secure, and stay in touch. We never use it for advertising or sell it to third parties.
         </p>
 
         <h2>4. Legal Basis for Processing</h2>
         <p>
-          We process personal data under the following legal bases, applicable under both the LFPDPPP
-          and the GDPR:
+          We process personal data under the following legal bases, applicable under both U.S. privacy
+          laws and the GDPR:
         </p>
         <ul>
           <li>
             <strong>Consent</strong> — Where you have given explicit consent, such as for marketing
-            communications. Under the LFPDPPP, you provide consent through our privacy notice
-            (aviso de privacidad) at the time of data collection.
+            communications. You provide consent through our privacy notice at the time of data
+            collection.
           </li>
           <li>
             <strong>Contract performance</strong> — Processing necessary to deliver the Services you
@@ -106,7 +105,7 @@ export default function PrivacyPolicy() {
             interests are not overridden by your rights.
           </li>
           <li>
-            <strong>Legal obligation</strong> — Processing necessary to comply with applicable Mexican
+            <strong>Legal obligation</strong> — Processing necessary to comply with applicable U.S.
             or international law.
           </li>
         </ul>
@@ -140,9 +139,9 @@ export default function PrivacyPolicy() {
 
         <h2>6. International Transfers</h2>
         <p>
-          Yeti is based in the United States. Your data may be processed in the United States and other countries where our
-          infrastructure providers operate. When we transfer personal data outside of the United States or the EEA,
-          we ensure appropriate safeguards are in place:
+          Yeti is based in the United States. Your data may be processed in the United States and other
+          countries where our infrastructure providers operate. When we transfer personal data outside
+          of the United States or the EEA, we ensure appropriate safeguards are in place:
         </p>
         <ul>
           <li>
@@ -150,8 +149,8 @@ export default function PrivacyPolicy() {
             transfers to countries with an adequate level of data protection.
           </li>
           <li>
-            For Mexican users: Transfers comply with Articles 36 and 37 of the LFPDPPP, ensuring the
-            recipient provides comparable data protection standards.
+            For all users: We require that any third-party recipient of personal data maintains
+            comparable data protection standards through contractual obligations.
           </li>
         </ul>
         <p className="legal-tip">
@@ -167,29 +166,28 @@ export default function PrivacyPolicy() {
         </p>
         <p>
           We may retain certain information longer where required by law (for example, tax and billing
-          records under Mexican fiscal law) or for legitimate purposes such as resolving disputes.
-          Usage data is retained in aggregated, anonymized form after the retention period.
+          records) or for legitimate purposes such as resolving disputes. Usage data is retained in
+          aggregated, anonymized form after the retention period.
         </p>
 
         <h2>8. Your Rights</h2>
         <p>
-          Depending on your jurisdiction, you have the following rights over your personal data. These
-          rights are recognized under both the LFPDPPP (known as ARCO rights) and the GDPR:
+          Depending on your jurisdiction, you have the following rights over your personal data:
         </p>
         <ul>
           <li>
             <strong>Access</strong> — Request a copy of the personal data we hold about you.
           </li>
           <li>
-            <strong>Rectification (Correction)</strong> — Request that we correct inaccurate or
+            <strong>Correction</strong> — Request that we correct inaccurate or
             incomplete personal data.
           </li>
           <li>
-            <strong>Cancellation (Deletion)</strong> — Request that we delete your personal data,
+            <strong>Deletion</strong> — Request that we delete your personal data,
             subject to legal retention requirements.
           </li>
           <li>
-            <strong>Opposition (Objection)</strong> — Object to processing of your personal data for
+            <strong>Objection</strong> — Object to processing of your personal data for
             specific purposes, including direct marketing.
           </li>
           <li>
@@ -208,7 +206,7 @@ export default function PrivacyPolicy() {
         <p>
           To exercise any of these rights, contact us at{' '}
           <a href="mailto:privacy@yetirocks.com">privacy@yetirocks.com</a>. We will respond within
-          twenty (20) business days for LFPDPPP requests or thirty (30) days for GDPR requests.
+          thirty (30) days.
         </p>
         <p>
           EEA users also have the right to lodge a complaint with their local data protection
@@ -216,7 +214,7 @@ export default function PrivacyPolicy() {
         </p>
         <p className="legal-tip">
           <strong>What this means:</strong> You are in control of your data. Send us an email and we
-          will help you access, correct, or delete it. No hoops to jump through.
+          will help you access, correct, or delete it. No hoops, no runaround.
         </p>
 
         <h2>9. Cookies</h2>
@@ -248,7 +246,7 @@ export default function PrivacyPolicy() {
           <li>Encryption in transit (TLS) and at rest</li>
           <li>Role-based access controls and least-privilege policies</li>
           <li>Regular security assessments and vulnerability scanning</li>
-          <li>An incident response plan with notification procedures compliant with the LFPDPPP and GDPR breach notification requirements</li>
+          <li>An incident response plan with breach notification procedures compliant with applicable U.S. law and GDPR requirements</li>
         </ul>
         <p>
           No system is perfectly secure. While we work hard to protect your data, we cannot guarantee
@@ -256,8 +254,8 @@ export default function PrivacyPolicy() {
         </p>
         <p className="legal-tip">
           <strong>What this means:</strong> We encrypt your data, lock down access, and have a plan
-          ready in case something goes wrong. If there is ever a breach that affects you, we will
-          notify you promptly.
+          ready in case something goes wrong. If there is ever a breach that affects you, we will let
+          you know promptly.
         </p>
 
         <h2>12. Changes to This Policy</h2>
@@ -279,7 +277,7 @@ export default function PrivacyPolicy() {
         </ul>
         <p className="legal-tip">
           <strong>What this means:</strong> We are real people, not a faceless inbox. Write to us and
-          a human will respond.
+          a human will get back to you.
         </p>
       </div>
     </div>
