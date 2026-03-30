@@ -65,7 +65,7 @@ export default function Nav({ onGetStarted }: NavProps) {
           <NavLink to="/platform" className={({ isActive }) => `nav-link${isActive ? ' active' : ''}`}>
             Product
           </NavLink>
-          <NavLink to="/solutions/use-cases" className={() => `nav-link${isSolutionsActive ? ' active' : ''}`}>
+          <NavLink to="/solutions/ai" className={() => `nav-link${isSolutionsActive ? ' active' : ''}`}>
             Solutions
           </NavLink>
           {/*<NavLink to="/pricing" className={({ isActive }) => `nav-link${isActive ? ' active' : ''}`}>
@@ -109,6 +109,9 @@ export default function Nav({ onGetStarted }: NavProps) {
       {hasSubnav && (
         <div className="www-subnav">
           {isSolutionsActive && <>
+            <NavLink to="/solutions/ai" className={({ isActive }) => `subnav-link${isActive ? ' active' : ''}`}>
+              AI
+            </NavLink>
             <NavLink to="/solutions/use-cases" className={({ isActive }) => `subnav-link${isActive ? ' active' : ''}`}>
               Use Cases
             </NavLink>
@@ -138,6 +141,9 @@ export default function Nav({ onGetStarted }: NavProps) {
           Product
         </NavLink>
         <span className="nav-mobile-header">Solutions</span>
+        <NavLink to="/solutions/ai" className="nav-link nav-mobile-indent" onClick={closeMobile}>
+          AI
+        </NavLink>
         <NavLink to="/solutions/use-cases" className="nav-link nav-mobile-indent" onClick={closeMobile}>
           Use Cases
         </NavLink>

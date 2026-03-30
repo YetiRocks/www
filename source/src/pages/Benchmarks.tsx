@@ -38,6 +38,10 @@ export default function Benchmarks() {
 
       {groups.map(group => {
         const groupTests = Object.entries(tests).filter(([, t]) => t.group === group)
+        // Only show node columns where every test in the group has data
+        const visibleNodes = NODE_COUNTS.filter(n =>
+          groupTests.every(([, t]) => t.nodes[n] != null)
+        )
 
         return (
           <section className="bench-section" key={group}>
@@ -45,7 +49,7 @@ export default function Benchmarks() {
               <thead>
                 <tr>
                   <th style={{ color: 'var(--color-primary)' }}>{group}</th>
-                  {NODE_COUNTS.map(n => (
+                  {visibleNodes.map(n => (
                     <th key={n} className="bench-col-num" style={{ whiteSpace: 'nowrap' }}>
                       N={n}
                     </th>
@@ -58,7 +62,7 @@ export default function Benchmarks() {
                 {groupTests.map(([id, test]) => (
                   <tr key={id}>
                     <td>{test.name}</td>
-                    {NODE_COUNTS.map(n => (
+                    {visibleNodes.map(n => (
                       <td key={n} className="bench-col-num" style={{ whiteSpace: 'nowrap' }}>
                         <span className="bench-highlight">{fmt(test.nodes[n])}</span>
                       </td>

@@ -8,6 +8,7 @@ import Platform from './pages/Platform'
 import Applications from './pages/Applications'
 import Demos from './pages/Demos'
 import Hosting from './pages/Hosting'
+import AI from './pages/AI'
 import UseCases from './pages/UseCases'
 // import Pricing from './pages/Pricing'
 import Benchmarks from './pages/Benchmarks'
@@ -43,6 +44,7 @@ function AppContent({ onGetStarted }: { onGetStarted: () => void }) {
         <Routes>
           <Route path="/" element={<Home onGetStarted={onGetStarted} />} />
           <Route path="/platform" element={<Platform />} />
+          <Route path="/solutions/ai" element={<AI />} />
           <Route path="/solutions/use-cases" element={<UseCases />} />
           <Route path="/solutions/cloud" element={<Hosting />} />
           {/*<Route path="/pricing" element={<Pricing onGetStarted={onGetStarted} />} />*/}
