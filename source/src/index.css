@@ -61,6 +61,11 @@ a:hover {
 
 /* ===== Navigation (www-specific: center links, hamburger, mobile) ===== */
 
+.nav-left,
+.nav-right {
+  flex: 1;
+}
+
 .nav-center {
   display: flex;
   align-items: center;
@@ -584,14 +589,13 @@ code {
 
 .bench-col-num {
   width: 120px;
-  text-align: right !important;
+  text-align: center !important;
   font-family: var(--font-family-mono);
   font-size: var(--font-size-sm);
 }
 
 .bench-highlight {
   color: var(--color-white);
-  font-weight: 600;
 }
 
 .bench-error-rate {

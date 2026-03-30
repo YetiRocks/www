@@ -1,24 +1,21 @@
 {
   "tests": {
-    "rest-read": { "id": "rest-read", "name": "REST Read", "binary": "load-rest", "duration": 30, "vus": 100, "category": "throughput", "order": 0, "best": { "throughput": 93000, "p50": 0.93, "p95": 1.86, "p99": 3.2, "total": 2790000, "errors": 0 } },
-    "rest-write": { "id": "rest-write", "name": "REST Write", "binary": "load-rest", "duration": 30, "vus": 100, "category": "throughput", "order": 1, "best": { "throughput": 52000, "p50": 1.6, "p95": 3.34, "p99": 5.8, "total": 1560000, "errors": 0 } },
-    "rest-batch-write": { "id": "rest-batch-write", "name": "REST Batch Write", "binary": "load-rest", "duration": 30, "vus": 100, "category": "throughput", "order": 2, "best": { "throughput": 597000, "p50": 0.15, "p95": 0.30, "p99": 0.5, "total": 17910000, "errors": 0 } },
-    "rest-update": { "id": "rest-update", "name": "REST Update", "binary": "load-rest", "duration": 30, "vus": 100, "category": "throughput", "order": 3, "best": { "throughput": 40000, "p50": 2.1, "p95": 4.26, "p99": 7.5, "total": 1200000, "errors": 0 } },
-    "rest-join": { "id": "rest-join", "name": "REST Join", "binary": "load-rest", "duration": 30, "vus": 100, "category": "throughput", "order": 4, "best": { "throughput": 87000, "p50": 0.96, "p95": 1.93, "p99": 3.4, "total": 2610000, "errors": 0 } },
-    "graphql-read": { "id": "graphql-read", "name": "GraphQL Read", "binary": "load-graphql", "duration": 30, "vus": 100, "category": "throughput", "order": 5, "best": { "throughput": 81000, "p50": 1.1, "p95": 2.29, "p99": 3.9, "total": 2430000, "errors": 0 } },
-    "graphql-mutation": { "id": "graphql-mutation", "name": "GraphQL Write", "binary": "load-graphql", "duration": 30, "vus": 100, "category": "throughput", "order": 6, "best": { "throughput": 52000, "p50": 1.6, "p95": 3.27, "p99": 5.7, "total": 1560000, "errors": 0 } },
-    "graphql-batch-write": { "id": "graphql-batch-write", "name": "GraphQL Batch Write", "binary": "load-graphql", "duration": 30, "vus": 100, "category": "throughput", "order": 7, "best": { "throughput": 416000, "p50": 0.2, "p95": 0.39, "p99": 0.7, "total": 12480000, "errors": 0 } },
-    "graphql-update": { "id": "graphql-update", "name": "GraphQL Update", "binary": "load-graphql", "duration": 30, "vus": 100, "category": "throughput", "order": 8, "best": { "throughput": 30000, "p50": 2.8, "p95": 5.90, "p99": 10.2, "total": 900000, "errors": 0 } },
-    "graphql-join": { "id": "graphql-join", "name": "GraphQL Join", "binary": "load-graphql", "duration": 30, "vus": 100, "category": "throughput", "order": 9, "best": { "throughput": 90000, "p50": 0.95, "p95": 2.02, "p99": 3.5, "total": 2700000, "errors": 0 } },
-    "vector-embed": { "id": "vector-embed", "name": "Vector Embed", "binary": "load-vector", "duration": 30, "vus": 10, "category": "throughput", "order": 10, "best": { "throughput": 44, "p50": 170, "p95": 344, "p99": 420, "total": 1320, "errors": 0 } },
-    "vector-search": { "id": "vector-search", "name": "Vector Search", "binary": "load-vector", "duration": 30, "vus": 100, "category": "throughput", "order": 11, "best": { "throughput": 12000, "p50": 6.5, "p95": 13.7, "p99": 22.0, "total": 360000, "errors": 0 } },
-    "blob-retrieval": { "id": "blob-retrieval", "name": "150k Blob Retrieval", "binary": "load-blob", "duration": 30, "vus": 100, "category": "throughput", "order": 12, "best": { "throughput": 19000, "p50": 4.5, "p95": 9.78, "p99": 16.0, "total": 570000, "errors": 0 } },
-    "ws": { "id": "ws", "name": "WS Fan-Out", "binary": "load-realtime", "duration": 30, "vus": 15000, "category": "throughput", "order": 13, "best": { "throughput": 29000, "p50": 0.5, "p95": 1.0, "p99": 2.0, "total": 1000000, "errors": 0, "peakConnections": 4400 } },
-    "ws-publish": { "id": "ws-publish", "name": "WS Fan-In", "binary": "load-realtime", "duration": 30, "vus": 100, "category": "throughput", "order": 14, "best": { "throughput": 756000, "p50": 0.005, "p95": 0.01, "p99": 0.02, "total": 22680000, "errors": 0 } },
-    "sse": { "id": "sse", "name": "SSE Fan-Out", "binary": "load-realtime", "duration": 30, "vus": 15000, "category": "throughput", "order": 15, "best": { "throughput": 27000, "p50": 0.5, "p95": 1.0, "p99": 2.0, "total": 942000, "errors": 0, "peakConnections": 1000 } },
-    "mqtt": { "id": "mqtt", "name": "MQTT Fan-Out", "binary": "load-realtime", "duration": 30, "vus": 15000, "category": "throughput", "order": 16, "best": { "throughput": 35000, "p50": 0.3, "p95": 0.8, "p99": 1.5, "total": 1300000, "errors": 0, "peakConnections": 1800 } }
-  },
-  "categories": [
-    { "category": "throughput", "label": "Throughput - 30s" }
-  ]
+    "rest-read":          { "name": "Read",        "group": "REST API",         "nodes": { "1": 93000,  "3": null, "6": null, "9": null }, "p95": 1.86, "p99": 3.2 },
+    "rest-write":         { "name": "Write",       "group": "REST API",         "nodes": { "1": 52000,  "3": null, "6": null, "9": null }, "p95": 3.34, "p99": 5.8 },
+    "rest-batch-write":   { "name": "Batch Write", "group": "REST API",         "nodes": { "1": 597000, "3": null, "6": null, "9": null }, "p95": 0.30, "p99": 0.5 },
+    "rest-update":        { "name": "Update",      "group": "REST API",         "nodes": { "1": 40000,  "3": null, "6": null, "9": null }, "p95": 4.26, "p99": 7.5 },
+    "rest-join":          { "name": "Join",         "group": "REST API",         "nodes": { "1": 87000,  "3": null, "6": null, "9": null }, "p95": 1.93, "p99": 3.4 },
+    "graphql-read":       { "name": "Read",        "group": "GraphQL API",      "nodes": { "1": 81000,  "3": null, "6": null, "9": null }, "p95": 2.29, "p99": 3.9 },
+    "graphql-write":      { "name": "Write",       "group": "GraphQL API",      "nodes": { "1": 52000,  "3": null, "6": null, "9": null }, "p95": 3.27, "p99": 5.7 },
+    "graphql-batch-write":{ "name": "Batch Write", "group": "GraphQL API",      "nodes": { "1": 416000, "3": null, "6": null, "9": null }, "p95": 0.39, "p99": 0.7 },
+    "graphql-update":     { "name": "Update",      "group": "GraphQL API",      "nodes": { "1": 30000,  "3": null, "6": null, "9": null }, "p95": 5.90, "p99": 10.2 },
+    "graphql-join":       { "name": "Join",         "group": "GraphQL API",      "nodes": { "1": 90000,  "3": null, "6": null, "9": null }, "p95": 2.02, "p99": 3.5 },
+    "ws-fan-in":          { "name": "WS Fan-In",   "group": "Realtime",         "nodes": { "1": 756000, "3": null, "6": null, "9": null }, "p95": 0.01, "p99": 0.02 },
+    "ws-fan-out":         { "name": "WS Fan-Out",  "group": "Realtime",         "nodes": { "1": 29000,  "3": null, "6": null, "9": null }, "p95": 1.0, "p99": 2.0 },
+    "sse-fan-out":        { "name": "SSE Fan-Out", "group": "Realtime",         "nodes": { "1": 27000,  "3": null, "6": null, "9": null }, "p95": 1.0, "p99": 2.0 },
+    "mqtt-fan-out":       { "name": "MQTT Fan-Out","group": "Realtime",         "nodes": { "1": 35000,  "3": null, "6": null, "9": null }, "p95": 0.8, "p99": 1.5 },
+    "vector-embed":       { "name": "Embed",       "group": "Vector & AI",      "nodes": { "1": 44,     "3": null, "6": null, "9": null }, "p95": 344, "p99": 420 },
+    "vector-search":      { "name": "Search",      "group": "Vector & AI",      "nodes": { "1": 12000,  "3": null, "6": null, "9": null }, "p95": 13.7, "p99": 22.0 },
+    "blob-retrieval":     { "name": "150KB Blob",  "group": "Large Objects",    "nodes": { "1": 19000,  "3": null, "6": null, "9": null }, "p95": 9.78, "p99": 16.0 }
+  }
 }
