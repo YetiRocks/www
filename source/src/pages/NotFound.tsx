@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { Link } from 'react-router-dom'
+import { Link } from '@tanstack/react-router'
 
 const facts = [
   'Samoyeds were bred by the Samoyede people of Siberia to herd reindeer, pull sleds, and keep their owners warm by sleeping on top of them.',

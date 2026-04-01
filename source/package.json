@@ -13,13 +13,14 @@
   "dependencies": {
     "highlight.js": "^11.11.1",
     "prism-react-renderer": "^2.4.1",
+    "@tanstack/react-router": "^1.160.2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "react-router-dom": "^6.21.0",
     "uplot": "^1.6.32"
   },
   "devDependencies": {
     "@biomejs/biome": "^2.4.10",
+    "@tanstack/router-plugin": "^1.160.2",
     "@types/node": "^25.5.0",
     "@types/react": "^18.2.43",
     "@types/react-dom": "^18.2.17",

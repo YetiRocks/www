@@ -1,4 +1,5 @@
 import { defineConfig } from 'vite'
+import { TanStackRouterVite } from '@tanstack/router-plugin/vite'
 import react from '@vitejs/plugin-react'
 import seoPlugin from './vite-plugin-seo'
 import { readFileSync } from 'fs'
@@ -33,10 +34,14 @@ const basePath = readYetiBasePath()
 
 export default defineConfig({
   base: basePath,
-  define: {
-    __BASENAME__: JSON.stringify(basePath.replace(/\/$/, '') || '/'),
-  },
-  plugins: [react(), seoPlugin()],
+  plugins: [
+    TanStackRouterVite({
+      routesDirectory: './src/routes',
+      generatedRouteTree: './src/routeTree.gen.ts',
+    }),
+    react(),
+    seoPlugin(),
+  ],
   build: {
     outDir: '../web',
     emptyOutDir: true,
@@ -44,7 +49,7 @@ export default defineConfig({
       output: {
         manualChunks: {
           'highlight': ['highlight.js', 'prism-react-renderer'],
-          'react-vendor': ['react', 'react-dom', 'react-router-dom'],
+          'react-vendor': ['react', 'react-dom', '@tanstack/react-router'],
         },
       },
     },

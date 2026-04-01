@@ -1,6 +1,6 @@
 import Code from '../components/Code'
 import Icon from '../components/Icon'
-import { Link } from 'react-router-dom'
+import { Link } from '@tanstack/react-router'
 
 export default function Applications() {
   return (
