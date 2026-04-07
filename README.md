@@ -63,7 +63,7 @@ The site loads automatically. No plugin compilation needed — yeti-www is a sta
 ### 4. Open in browser
 
 ```
-https://localhost/
+https://localhost:9996/
 ```
 
 The site is served at the root path (`route_prefix: "/"`). Navigate between pages using the top navigation bar.
