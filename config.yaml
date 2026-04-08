@@ -4,6 +4,7 @@ customer_id: "yeti"
 version: "1.0.0"
 description: "yetirocks.com marketing site + demos"
 
+
 schemas:
   path: schemas/schema.graphql
 
