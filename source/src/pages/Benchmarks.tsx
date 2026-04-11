@@ -1,4 +1,4 @@
-import benchmarkData from '../data/bestresults.json'
+import { useState, useEffect } from 'react'
 
 const NODE_COUNTS = ['1', '3', '6', '9'] as const
 
@@ -26,16 +26,31 @@ interface TestData {
   p99: number
 }
 
-const tests = benchmarkData.tests as Record<string, TestData>
-const groups = [...new Set(Object.values(tests).map(t => t.group))]
-const allTestEntries = Object.entries(tests)
-
-// Show a node column globally if at least 3 tests have data for it
-const globalVisibleNodes = NODE_COUNTS.filter(n =>
-  allTestEntries.filter(([, t]) => t.nodes[n] != null).length >= 3
-)
+interface BenchmarkData {
+  tests: Record<string, TestData>
+}
 
 export default function Benchmarks() {
+  const [data, setData] = useState<BenchmarkData | null>(null)
+
+  useEffect(() => {
+    fetch('/data/bestresults.json')
+      .then(r => r.json())
+      .then(setData)
+      .catch(err => console.error('Failed to load benchmarks:', err))
+  }, [])
+
+  if (!data) return <div className="container" style={{ padding: 0 }}>Loading benchmarks…</div>
+
+  const tests = data.tests
+  const groups = [...new Set(Object.values(tests).map(t => t.group))]
+  const allTestEntries = Object.entries(tests)
+
+  // Show a node column globally if at least 3 tests have data for it
+  const globalVisibleNodes = NODE_COUNTS.filter(n =>
+    allTestEntries.filter(([, t]) => t.nodes[n] != null).length >= 3
+  )
+
   return (
     <div className="container" style={{ padding: 0 }}>
       <div className="page-header">
