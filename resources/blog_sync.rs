@@ -3,7 +3,10 @@
 // Fetches markdown posts from YetiRocks/blog GitHub repo, renders to HTML,
 // downloads images, and stores everything in local tables.
 //
-// GET /www/api/blogsync → trigger sync + return status
+// GET /www/api/blogsync → trigger manual sync + return status
+//
+// Automatic sync: runs every 5 minutes via schedule!() bridge.
+// On startup, the first schedule fire syncs immediately.
 //
 // Repo structure:
 //   posts/{slug}/index.md        — post content with YAML frontmatter
@@ -20,6 +23,19 @@ const BRANCH: &str = "main";
 const POSTS_DIR: &str = "posts";
 const RAW_BASE: &str = "https://raw.githubusercontent.com/YetiRocks/blog/main/posts";
 const IMAGE_API: &str = "/www/api/blogimage";
+
+// TODO: Uncomment when schedule bridge is implemented (schedule-bridge.md)
+// schedule!("sync-blog", sync_posts_scheduled, "*/5 * * * *");
+//
+// async fn sync_posts_scheduled(ctx: &ScheduleContext) {
+//     let synced = do_sync(
+//         &ctx.get_table("BlogPost").unwrap(),
+//         &ctx.get_table("BlogImage").unwrap(),
+//     ).await;
+//     if synced > 0 {
+//         yeti_log!(info, "Scheduled sync: {} posts updated", synced);
+//     }
+// }
 
 resource!(BlogSync {
     name = "blogsync",
