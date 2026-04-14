@@ -1,24 +1,37 @@
+import { useState, useEffect } from 'react'
 import { Link } from '@tanstack/react-router'
-import { getPost } from '../data/posts'
-import { lazy, Suspense } from 'react'
+import { fetchPost, type Post } from '../data/posts'
 import { useSEO } from '../hooks/useSEO'
-
-// Dynamically import post content components from src/pages/blog/{slug}.tsx
-const postModules = import.meta.glob('./blog/*.tsx') as Record<string, () => Promise<{ default: React.ComponentType }>>
 
 interface BlogPostProps {
   slug: string
 }
 
 export default function BlogPost({ slug }: BlogPostProps) {
-  const post = getPost(slug)
+  const [post, setPost] = useState<Post | null>(null)
+  const [loading, setLoading] = useState(true)
 
   useSEO({
-    title: post?.title || 'Post not found',
-    description: post?.description || 'Blog post not found.',
+    title: post?.title || 'Blog',
+    description: post?.description || 'Yeti Blog',
     ogType: 'article',
     canonicalUrl: post ? `https://yetirocks.com/www/blog/${post.slug}` : undefined,
   })
+
+  useEffect(() => {
+    fetchPost(slug).then(p => { setPost(p); setLoading(false) })
+  }, [slug])
+
+  if (loading) {
+    return (
+      <div className="container">
+        <div className="page-header">
+          <Link to="/blog" className="blog-back-link">Blog</Link>
+          <h1 className="page-title">Loading...</h1>
+        </div>
+      </div>
+    )
+  }
 
   if (!post) {
     return (
@@ -32,22 +45,6 @@ export default function BlogPost({ slug }: BlogPostProps) {
       </div>
     )
   }
-
-  const modulePath = `./blog/${slug}.tsx`
-  const loader = postModules[modulePath]
-
-  if (!loader) {
-    return (
-      <div className="container">
-        <div className="page-header">
-          <h1 className="page-title">{post.title}</h1>
-          <p className="page-subtitle">Content not found for this post.</p>
-        </div>
-      </div>
-    )
-  }
-
-  const PostContent = lazy(loader)
 
   return (
     <div className="container">
@@ -63,9 +60,10 @@ export default function BlogPost({ slug }: BlogPostProps) {
           <h1 className="page-title">{post.title}</h1>
           <p className="page-subtitle">{post.description}</p>
         </div>
-        <Suspense fallback={<div className="section-desc">Loading...</div>}>
-          <PostContent />
-        </Suspense>
+        <div
+          className="blog-content"
+          dangerouslySetInnerHTML={{ __html: post.content || '' }}
+        />
       </article>
     </div>
   )

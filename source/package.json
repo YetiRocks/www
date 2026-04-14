@@ -11,9 +11,10 @@
     "lint:fix": "biome check --fix src/"
   },
   "dependencies": {
-    "highlight.js": "^11.11.1",
-    "prism-react-renderer": "^2.4.1",
     "@tanstack/react-router": "^1.160.2",
+    "highlight.js": "^11.11.1",
+    "marked": "^18.0.0",
+    "prism-react-renderer": "^2.4.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "uplot": "^1.6.32"
