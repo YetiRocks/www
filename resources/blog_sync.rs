@@ -46,6 +46,17 @@ resource!(BlogSync {
     }
 });
 
+/// Fetch a URL with optional GitHub PAT authentication.
+/// Reads BLOG_PAT from environment. If not set, fetches without auth (public repos only).
+fn github_fetch(url: &str) -> Result<FetchResponse> {
+    match std::env::var("BLOG_PAT") {
+        Ok(token) if !token.is_empty() => fetch!(url, {
+            "headers": { "Authorization": format!("Bearer {}", token) }
+        }),
+        _ => fetch!(url),
+    }
+}
+
 async fn sync_posts(ctx: &ResourceContext) -> usize {
     let post_table = match ctx.get_table("BlogPost") {
         Ok(t) => t,
@@ -69,7 +80,7 @@ async fn sync_posts(ctx: &ResourceContext) -> usize {
         REPO, POSTS_DIR, BRANCH
     );
 
-    let response = match fetch!(&api_url) {
+    let response = match github_fetch(&api_url) {
         Ok(r) => r,
         Err(e) => {
             yeti_log!(warn, "BlogSync: GitHub API failed: {}", e);
@@ -104,7 +115,7 @@ async fn sync_posts(ctx: &ResourceContext) -> usize {
 
         // Fetch index.md
         let md_url = format!("{}/{}/index.md", RAW_BASE, slug);
-        let raw = match fetch!(&md_url) {
+        let raw = match github_fetch(&md_url) {
             Ok(r) if r.ok() => match r.text() {
                 Ok(t) => t,
                 Err(_) => continue,
@@ -123,7 +134,7 @@ async fn sync_posts(ctx: &ResourceContext) -> usize {
             "https://api.github.com/repos/{}/contents/{}/{}?ref={}",
             REPO, POSTS_DIR, slug, BRANCH
         );
-        let image_files: Vec<String> = match fetch!(&folder_api) {
+        let image_files: Vec<String> = match github_fetch(&folder_api) {
             Ok(r) if r.ok() => {
                 let files: Vec<Value> = r.json().unwrap_or_default();
                 files
@@ -151,7 +162,7 @@ async fn sync_posts(ctx: &ResourceContext) -> usize {
         let mut has_hero = false;
         for filename in &image_files {
             let img_url = format!("{}/{}/{}", RAW_BASE, slug, filename);
-            if let Ok(img_resp) = fetch!(&img_url) {
+            if let Ok(img_resp) = github_fetch(&img_url) {
                 if img_resp.ok() {
                     if let Ok(bytes) = img_resp.bytes() {
                         let content_type = if filename.ends_with(".jpg") || filename.ends_with(".jpeg") {
