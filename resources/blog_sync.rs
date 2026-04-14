@@ -1,17 +1,17 @@
 // Blog Sync Resource
 //
-// Polls YetiRocks/blog GitHub repo for markdown posts and syncs them
-// to the BlogPost table.
+// Fetches markdown posts from YetiRocks/blog GitHub repo, renders to HTML,
+// downloads images, and stores everything in local tables.
 //
 // GET /www/api/blogsync → trigger sync + return status
 //
 // Repo structure:
-//   posts/{slug}/index.md      — post content with YAML frontmatter
-//   posts/{slug}/hero_image.png — optional hero image (always named hero_image.png)
-//   posts/{slug}/*.png          — additional images referenced in markdown
+//   posts/{slug}/index.md        — post content with YAML frontmatter
+//   posts/{slug}/hero_image.png  — optional hero image
+//   posts/{slug}/*.png           — additional images referenced in markdown
 //
-// Images are served from GitHub raw content URLs. Relative image paths
-// in markdown are resolved to absolute GitHub URLs during sync.
+// Images are downloaded and stored in BlogImage table as base64.
+// HTML references /www/api/blogimage/{slug}/{filename} for all images.
 
 use yeti_sdk::prelude::*;
 
@@ -19,6 +19,7 @@ const REPO: &str = "YetiRocks/blog";
 const BRANCH: &str = "main";
 const POSTS_DIR: &str = "posts";
 const RAW_BASE: &str = "https://raw.githubusercontent.com/YetiRocks/blog/main/posts";
+const IMAGE_API: &str = "/www/api/blogimage";
 
 resource!(BlogSync {
     name = "blogsync",
@@ -30,10 +31,18 @@ resource!(BlogSync {
 });
 
 async fn sync_posts(ctx: &ResourceContext) -> usize {
-    let table = match ctx.get_table("BlogPost") {
+    let post_table = match ctx.get_table("BlogPost") {
         Ok(t) => t,
         Err(e) => {
             yeti_log!(warn, "BlogSync: BlogPost table not available: {}", e);
+            return 0;
+        }
+    };
+
+    let image_table = match ctx.get_table("BlogImage") {
+        Ok(t) => t,
+        Err(e) => {
+            yeti_log!(warn, "BlogSync: BlogImage table not available: {}", e);
             return 0;
         }
     };
@@ -47,7 +56,7 @@ async fn sync_posts(ctx: &ResourceContext) -> usize {
     let response = match fetch!(&api_url) {
         Ok(r) => r,
         Err(e) => {
-            yeti_log!(warn, "BlogSync: GitHub API fetch failed: {}", e);
+            yeti_log!(warn, "BlogSync: GitHub API failed: {}", e);
             return 0;
         }
     };
@@ -60,7 +69,7 @@ async fn sync_posts(ctx: &ResourceContext) -> usize {
     let entries: Vec<Value> = match response.json() {
         Ok(v) => v,
         Err(e) => {
-            yeti_log!(warn, "BlogSync: GitHub API parse failed: {}", e);
+            yeti_log!(warn, "BlogSync: parse failed: {}", e);
             return 0;
         }
     };
@@ -68,9 +77,7 @@ async fn sync_posts(ctx: &ResourceContext) -> usize {
     let mut synced = 0usize;
 
     for entry in &entries {
-        // Only process directories (each is a post folder)
-        let entry_type = entry.get("type").and_then(|v| v.as_str()).unwrap_or("");
-        if entry_type != "dir" {
+        if entry.get("type").and_then(|v| v.as_str()) != Some("dir") {
             continue;
         }
 
@@ -79,7 +86,7 @@ async fn sync_posts(ctx: &ResourceContext) -> usize {
             None => continue,
         };
 
-        // Fetch index.md from the post folder
+        // Fetch index.md
         let md_url = format!("{}/{}/index.md", RAW_BASE, slug);
         let raw = match fetch!(&md_url) {
             Ok(r) if r.ok() => match r.text() {
@@ -89,21 +96,92 @@ async fn sync_posts(ctx: &ResourceContext) -> usize {
             _ => continue,
         };
 
-        // Parse frontmatter
         let (meta, content) = parse_frontmatter(&raw);
         let title = match meta.get("title") {
             Some(t) => t.clone(),
             None => continue,
         };
 
-        // Check for hero image (convention: hero_image.png in the post folder)
-        let hero_url = format!("{}/{}/hero_image.png", RAW_BASE, slug);
+        // List files in the post folder to find images
+        let folder_api = format!(
+            "https://api.github.com/repos/{}/contents/{}/{}?ref={}",
+            REPO, POSTS_DIR, slug, BRANCH
+        );
+        let image_files: Vec<String> = match fetch!(&folder_api) {
+            Ok(r) if r.ok() => {
+                let files: Vec<Value> = r.json().unwrap_or_default();
+                files
+                    .iter()
+                    .filter_map(|f| {
+                        let name = f.get("name")?.as_str()?;
+                        if name.ends_with(".png")
+                            || name.ends_with(".jpg")
+                            || name.ends_with(".jpeg")
+                            || name.ends_with(".gif")
+                            || name.ends_with(".webp")
+                            || name.ends_with(".avif")
+                        {
+                            Some(name.to_string())
+                        } else {
+                            None
+                        }
+                    })
+                    .collect()
+            },
+            _ => Vec::new(),
+        };
 
-        // Convert markdown to HTML, resolving relative image paths to GitHub URLs
+        // Download and store each image
+        let mut has_hero = false;
+        for filename in &image_files {
+            let img_url = format!("{}/{}/{}", RAW_BASE, slug, filename);
+            if let Ok(img_resp) = fetch!(&img_url) {
+                if img_resp.ok() {
+                    if let Ok(bytes) = img_resp.bytes() {
+                        let content_type = if filename.ends_with(".jpg") || filename.ends_with(".jpeg") {
+                            "image/jpeg"
+                        } else if filename.ends_with(".gif") {
+                            "image/gif"
+                        } else if filename.ends_with(".webp") {
+                            "image/webp"
+                        } else if filename.ends_with(".avif") {
+                            "image/avif"
+                        } else {
+                            "image/png"
+                        };
+
+                        let image_id = format!("{}/{}", slug, filename);
+                        let record = json!({
+                            "id": image_id,
+                            "contentType": content_type,
+                            "data": base64_encode(&bytes),
+                        });
+
+                        if let Err(e) = image_table.put(&image_id, record).await {
+                            yeti_log!(warn, "BlogSync: image store failed for {}/{}: {}", slug, filename, e);
+                        }
+
+                        if filename == "hero_image.png"
+                            || filename == "hero_image.jpg"
+                            || filename == "hero_image.jpeg"
+                        {
+                            has_hero = true;
+                        }
+                    }
+                }
+            }
+        }
+
+        // Convert markdown to HTML with local image URLs
         let html = markdown_to_html(&content, slug);
 
-        // Build record with hero image URL
-        let mut record = json!({
+        let hero_value = if has_hero {
+            json!(format!("{}/{}/hero_image.png", IMAGE_API, slug))
+        } else {
+            json!(null)
+        };
+
+        let record = json!({
             "id": slug,
             "title": title,
             "description": meta.get("description").cloned().unwrap_or_default(),
@@ -112,28 +190,19 @@ async fn sync_posts(ctx: &ResourceContext) -> usize {
             "category": meta.get("category").cloned().unwrap_or_else(|| "Engineering".to_string()),
             "readingTime": meta.get("readingTime").cloned().unwrap_or_else(|| "5 min read".to_string()),
             "content": html,
-            "heroImage": hero_url,
+            "heroImage": hero_value,
         });
 
-        // Check if hero image actually exists (HEAD request)
-        if let Ok(head) = fetch!(&record["heroImage"].as_str().unwrap_or(""), {
-            "method": "HEAD"
-        }) {
-            if !head.ok() {
-                record["heroImage"] = json!(null);
-            }
-        }
-
-        match table.put(slug, record).await {
+        match post_table.put(slug, record).await {
             Ok(_) => synced += 1,
             Err(e) => {
-                yeti_log!(warn, "BlogSync: Failed to write post '{}': {}", slug, e);
+                yeti_log!(warn, "BlogSync: write failed for '{}': {}", slug, e);
             }
         }
     }
 
     if synced > 0 {
-        yeti_log!(info, "BlogSync: synced {} posts from {}", synced, REPO);
+        yeti_log!(info, "BlogSync: synced {} posts + images from {}", synced, REPO);
     }
 
     synced
@@ -141,34 +210,27 @@ async fn sync_posts(ctx: &ResourceContext) -> usize {
 
 fn parse_frontmatter(markdown: &str) -> (std::collections::HashMap<String, String>, String) {
     let mut meta = std::collections::HashMap::new();
-
     if !markdown.starts_with("---\n") {
         return (meta, markdown.to_string());
     }
-
     let rest = &markdown[4..];
     let end = match rest.find("\n---\n") {
         Some(pos) => pos,
         None => return (meta, markdown.to_string()),
     };
-
-    let frontmatter = &rest[..end];
-    let content = &rest[end + 5..];
-
-    for line in frontmatter.lines() {
+    for line in rest[..end].lines() {
         if let Some(colon) = line.find(':') {
             let key = line[..colon].trim().to_string();
             let value = line[colon + 1..].trim().trim_matches('"').trim_matches('\'').to_string();
             meta.insert(key, value);
         }
     }
-
-    (meta, content.trim().to_string())
+    (meta, rest[end + 5..].trim().to_string())
 }
 
-/// Convert markdown to HTML, resolving relative image paths to GitHub raw URLs.
+/// Convert markdown to HTML with image URLs pointing to local blogimage API.
 fn markdown_to_html(md: &str, slug: &str) -> String {
-    let image_base = format!("{}/{}", RAW_BASE, slug);
+    let image_prefix = format!("{}/{}", IMAGE_API, slug);
     let mut html = String::with_capacity(md.len() * 2);
     let mut in_code_block = false;
     let mut code_lang = String::new();
@@ -177,7 +239,6 @@ fn markdown_to_html(md: &str, slug: &str) -> String {
     let mut in_list = false;
 
     for line in md.lines() {
-        // Code blocks
         if line.starts_with("```") {
             if in_code_block {
                 html.push_str("<code>");
@@ -189,16 +250,15 @@ fn markdown_to_html(md: &str, slug: &str) -> String {
                 if in_paragraph { html.push_str("</p>\n"); in_paragraph = false; }
                 if in_list { html.push_str("</ul>\n"); in_list = false; }
                 code_lang = line[3..].trim().to_string();
-                if code_lang.is_empty() {
-                    html.push_str("<pre>");
+                html.push_str(if code_lang.is_empty() {
+                    "<pre>".to_string()
                 } else {
-                    html.push_str(&format!("<pre class=\"language-{}\">", code_lang));
-                }
+                    format!("<pre class=\"language-{}\">", code_lang)
+                }.as_str());
                 in_code_block = true;
             }
             continue;
         }
-
         if in_code_block {
             if !code_buf.is_empty() { code_buf.push('\n'); }
             code_buf.push_str(line);
@@ -206,142 +266,112 @@ fn markdown_to_html(md: &str, slug: &str) -> String {
         }
 
         let trimmed = line.trim();
-
-        // Empty line
         if trimmed.is_empty() {
             if in_paragraph { html.push_str("</p>\n"); in_paragraph = false; }
             if in_list { html.push_str("</ul>\n"); in_list = false; }
             continue;
         }
-
-        // Headings
         if trimmed.starts_with("## ") {
             if in_paragraph { html.push_str("</p>\n"); in_paragraph = false; }
             if in_list { html.push_str("</ul>\n"); in_list = false; }
-            html.push_str(&format!("<h2>{}</h2>\n", inline_md(trimmed[3..].trim(), &image_base)));
+            html.push_str(&format!("<h2>{}</h2>\n", inline_md(&trimmed[3..], &image_prefix)));
             continue;
         }
         if trimmed.starts_with("### ") {
             if in_paragraph { html.push_str("</p>\n"); in_paragraph = false; }
             if in_list { html.push_str("</ul>\n"); in_list = false; }
-            html.push_str(&format!("<h3>{}</h3>\n", inline_md(trimmed[4..].trim(), &image_base)));
+            html.push_str(&format!("<h3>{}</h3>\n", inline_md(&trimmed[4..], &image_prefix)));
             continue;
         }
-
-        // Unordered list
         if trimmed.starts_with("- ") {
             if in_paragraph { html.push_str("</p>\n"); in_paragraph = false; }
             if !in_list { html.push_str("<ul>\n"); in_list = true; }
-            html.push_str(&format!("<li>{}</li>\n", inline_md(&trimmed[2..], &image_base)));
+            html.push_str(&format!("<li>{}</li>\n", inline_md(&trimmed[2..], &image_prefix)));
             continue;
         }
-
-        // Blockquote
         if trimmed.starts_with("> ") {
             if in_paragraph { html.push_str("</p>\n"); in_paragraph = false; }
             if in_list { html.push_str("</ul>\n"); in_list = false; }
-            html.push_str(&format!("<blockquote><p>{}</p></blockquote>\n", inline_md(&trimmed[2..], &image_base)));
+            html.push_str(&format!("<blockquote><p>{}</p></blockquote>\n", inline_md(&trimmed[2..], &image_prefix)));
             continue;
         }
-
-        // Image on its own line: ![alt](path)
+        // Standalone image
         if trimmed.starts_with("![") {
             if in_paragraph { html.push_str("</p>\n"); in_paragraph = false; }
             if in_list { html.push_str("</ul>\n"); in_list = false; }
-            if let Some((alt, src)) = parse_image_md(trimmed) {
-                let resolved_src = resolve_image_url(&src, &image_base);
+            if let Some((alt, src)) = parse_image(trimmed) {
+                let resolved = resolve_url(&src, &image_prefix);
                 html.push_str(&format!(
                     "<figure><img src=\"{}\" alt=\"{}\" loading=\"lazy\" />{}</figure>\n",
-                    resolved_src,
-                    html_escape(&alt),
+                    resolved, html_escape(&alt),
                     if alt.is_empty() { String::new() } else { format!("<figcaption>{}</figcaption>", html_escape(&alt)) }
                 ));
             }
             continue;
         }
-
-        // Regular paragraph
-        if !in_paragraph {
-            html.push_str("<p>");
-            in_paragraph = true;
-        } else {
-            html.push(' ');
-        }
-        html.push_str(&inline_md(trimmed, &image_base));
+        if !in_paragraph { html.push_str("<p>"); in_paragraph = true; } else { html.push(' '); }
+        html.push_str(&inline_md(trimmed, &image_prefix));
     }
-
     if in_paragraph { html.push_str("</p>\n"); }
     if in_list { html.push_str("</ul>\n"); }
-    if in_code_block {
-        html.push_str("<code>");
-        html.push_str(&html_escape(&code_buf));
-        html.push_str("</code></pre>\n");
-    }
-
+    if in_code_block { html.push_str("<code>"); html.push_str(&html_escape(&code_buf)); html.push_str("</code></pre>\n"); }
     html
 }
 
-fn parse_image_md(text: &str) -> Option<(String, String)> {
-    // ![alt](src)
-    let start = text.find("![")?;
-    let alt_end = text[start + 2..].find("](")?;
-    let alt = text[start + 2..start + 2 + alt_end].to_string();
-    let src_start = start + 2 + alt_end + 2;
-    let src_end = text[src_start..].find(')')?;
-    let src = text[src_start..src_start + src_end].to_string();
-    Some((alt, src))
+fn parse_image(text: &str) -> Option<(String, String)> {
+    let s = text.find("![")?;
+    let ae = text[s + 2..].find("](")?;
+    let alt = text[s + 2..s + 2 + ae].to_string();
+    let ss = s + 2 + ae + 2;
+    let se = text[ss..].find(')')?;
+    Some((alt, text[ss..ss + se].to_string()))
 }
 
-fn resolve_image_url(src: &str, image_base: &str) -> String {
-    if src.starts_with("http://") || src.starts_with("https://") {
-        src.to_string()
-    } else {
-        format!("{}/{}", image_base, src.trim_start_matches("./"))
-    }
+fn resolve_url(src: &str, prefix: &str) -> String {
+    if src.starts_with("http://") || src.starts_with("https://") { src.to_string() }
+    else { format!("{}/{}", prefix, src.trim_start_matches("./")) }
 }
 
-/// Inline markdown: bold, italic, code, links, inline images
-fn inline_md(text: &str, image_base: &str) -> String {
-    let mut result = html_escape(text);
-    // Code spans
-    while let Some(start) = result.find('`') {
-        if let Some(end) = result[start + 1..].find('`') {
-            let code = result[start + 1..start + 1 + end].to_string();
-            result = format!("{}<code>{}</code>{}", &result[..start], code, &result[start + 2 + end..]);
+fn inline_md(text: &str, image_prefix: &str) -> String {
+    let mut r = html_escape(text);
+    // Code
+    while let Some(s) = r.find('`') {
+        if let Some(e) = r[s + 1..].find('`') {
+            let c = r[s + 1..s + 1 + e].to_string();
+            r = format!("{}<code>{}</code>{}", &r[..s], c, &r[s + 2 + e..]);
         } else { break; }
     }
     // Bold
-    while let Some(start) = result.find("**") {
-        if let Some(end) = result[start + 2..].find("**") {
-            let bold = result[start + 2..start + 2 + end].to_string();
-            result = format!("{}<strong>{}</strong>{}", &result[..start], bold, &result[start + 4 + end..]);
+    while let Some(s) = r.find("**") {
+        if let Some(e) = r[s + 2..].find("**") {
+            let b = r[s + 2..s + 2 + e].to_string();
+            r = format!("{}<strong>{}</strong>{}", &r[..s], b, &r[s + 4 + e..]);
         } else { break; }
     }
-    // Images ![alt](src)
-    while let Some(start) = result.find("![") {
-        if let Some((alt, src)) = parse_image_md(&result[start..]) {
-            let full_len = 4 + alt.len() + src.len(); // ![alt](src)
-            let resolved = resolve_image_url(&src, image_base);
-            let img_html = format!("<img src=\"{}\" alt=\"{}\" loading=\"lazy\" />", resolved, alt);
-            result = format!("{}{}{}", &result[..start], img_html, &result[start + full_len..]);
+    // Images
+    while let Some(s) = r.find("![") {
+        if let Some((alt, src)) = parse_image(&r[s..]) {
+            let len = 4 + alt.len() + src.len();
+            let resolved = resolve_url(&src, image_prefix);
+            let img = format!("<img src=\"{}\" alt=\"{}\" loading=\"lazy\" />", resolved, alt);
+            r = format!("{}{}{}", &r[..s], img, &r[s + len..]);
         } else { break; }
     }
-    // Links [text](url)
-    while let Some(bracket_start) = result.find('[') {
-        // Skip if preceded by ! (image, already handled)
-        if bracket_start > 0 && result.as_bytes()[bracket_start - 1] == b'!' { break; }
-        if let Some(bracket_end) = result[bracket_start..].find("](") {
-            let abs_bracket_end = bracket_start + bracket_end;
-            if let Some(paren_end) = result[abs_bracket_end + 2..].find(')') {
-                let text_inner = result[bracket_start + 1..abs_bracket_end].to_string();
-                let url = result[abs_bracket_end + 2..abs_bracket_end + 2 + paren_end].to_string();
-                result = format!("{}<a href=\"{}\">{}</a>{}", &result[..bracket_start], url, text_inner, &result[abs_bracket_end + 3 + paren_end..]);
+    // Links
+    while let Some(bs) = r.find('[') {
+        if bs > 0 && r.as_bytes()[bs - 1] == b'!' { break; }
+        if let Some(be) = r[bs..].find("](") {
+            let abe = bs + be;
+            if let Some(pe) = r[abe + 2..].find(')') {
+                let t = r[bs + 1..abe].to_string();
+                let u = r[abe + 2..abe + 2 + pe].to_string();
+                r = format!("{}<a href=\"{}\">{}</a>{}", &r[..bs], u, t, &r[abe + 3 + pe..]);
             } else { break; }
         } else { break; }
     }
-    result
+    r
 }
 
-fn html_escape(text: &str) -> String {
-    text.replace('&', "&amp;").replace('<', "&lt;").replace('>', "&gt;")
+fn html_escape(t: &str) -> String {
+    t.replace('&', "&amp;").replace('<', "&lt;").replace('>', "&gt;")
 }

@@ -20,3 +20,9 @@ type BlogPost @table(database: "www") @export(public: [read]) {
     heroImage: String
     synced_at: String! @updatedTime
 }
+
+type BlogImage @table(database: "www") @export(public: [read]) {
+    id: ID! @primaryKey
+    contentType: String!
+    data: String!
+}
