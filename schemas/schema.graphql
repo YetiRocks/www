@@ -17,5 +17,6 @@ type BlogPost @table(database: "www") @export(public: [read]) {
     category: String!
     readingTime: String!
     content: String!
+    heroImage: String
     synced_at: String! @updatedTime
 }

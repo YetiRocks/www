@@ -60,6 +60,14 @@ export default function BlogPost({ slug }: BlogPostProps) {
           <h1 className="page-title">{post.title}</h1>
           <p className="page-subtitle">{post.description}</p>
         </div>
+        {post.heroImage && (
+          <img
+            src={post.heroImage}
+            alt={post.title}
+            className="blog-hero-image"
+            loading="eager"
+          />
+        )}
         <div
           className="blog-content"
           dangerouslySetInnerHTML={{ __html: post.content || '' }}

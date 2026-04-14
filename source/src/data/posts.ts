@@ -10,6 +10,7 @@ export interface Post {
   category: string
   readingTime: string
   content?: string
+  heroImage?: string
 }
 
 const API_BASE = `${STATIC_ROUTE}../api`
@@ -55,6 +56,7 @@ export async function fetchPost(slug: string): Promise<Post | null> {
       category: r.category || 'Engineering',
       readingTime: r.readingTime || '5 min read',
       content: r.content || '',
+      heroImage: r.heroImage || undefined,
     }
   } catch { return null }
 }
