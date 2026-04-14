@@ -8,6 +8,9 @@ description: "yetirocks.com marketing site + demos"
 schemas:
   path: schemas/schema.graphql
 
+resources:
+  - "resources/*.rs"
+
 static:
   path: web
   route: /

@@ -7,3 +7,15 @@ type BetaSignup @table(database: "www") @export(public: [create]) {
     idea: String
     created_at: String! @createdTime
 }
+
+type BlogPost @table(database: "www") @export(public: [read]) {
+    id: ID! @primaryKey
+    title: String!
+    description: String!
+    date: String!
+    author: String!
+    category: String!
+    readingTime: String!
+    content: String!
+    synced_at: String! @updatedTime
+}
