@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as PlatformRouteImport } from './routes/platform'
 import { Route as CompanyRouteImport } from './routes/company'
+import { Route as BlogRouteImport } from './routes/blog'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as LegalIndexRouteImport } from './routes/legal/index'
 import { Route as SolutionsUseCasesRouteImport } from './routes/solutions/use-cases'
@@ -25,6 +26,7 @@ import { Route as LegalAcceptableUseRouteImport } from './routes/legal/acceptabl
 import { Route as DevelopersGettingStartedRouteImport } from './routes/developers/getting-started'
 import { Route as DevelopersDemosRouteImport } from './routes/developers/demos'
 import { Route as DevelopersBenchmarksRouteImport } from './routes/developers/benchmarks'
+import { Route as BlogSlugRouteImport } from './routes/blog/$slug'
 
 const PlatformRoute = PlatformRouteImport.update({
   id: '/platform',
@@ -34,6 +36,11 @@ const PlatformRoute = PlatformRouteImport.update({
 const CompanyRoute = CompanyRouteImport.update({
   id: '/company',
   path: '/company',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const BlogRoute = BlogRouteImport.update({
+  id: '/blog',
+  path: '/blog',
   getParentRoute: () => rootRouteImport,
 } as any)
 const IndexRoute = IndexRouteImport.update({
@@ -107,11 +114,18 @@ const DevelopersBenchmarksRoute = DevelopersBenchmarksRouteImport.update({
   path: '/developers/benchmarks',
   getParentRoute: () => rootRouteImport,
 } as any)
+const BlogSlugRoute = BlogSlugRouteImport.update({
+  id: '/$slug',
+  path: '/$slug',
+  getParentRoute: () => BlogRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/blog': typeof BlogRouteWithChildren
   '/company': typeof CompanyRoute
   '/platform': typeof PlatformRoute
+  '/blog/$slug': typeof BlogSlugRoute
   '/developers/benchmarks': typeof DevelopersBenchmarksRoute
   '/developers/demos': typeof DevelopersDemosRoute
   '/developers/getting-started': typeof DevelopersGettingStartedRoute
@@ -128,8 +142,10 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/blog': typeof BlogRouteWithChildren
   '/company': typeof CompanyRoute
   '/platform': typeof PlatformRoute
+  '/blog/$slug': typeof BlogSlugRoute
   '/developers/benchmarks': typeof DevelopersBenchmarksRoute
   '/developers/demos': typeof DevelopersDemosRoute
   '/developers/getting-started': typeof DevelopersGettingStartedRoute
@@ -147,8 +163,10 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/blog': typeof BlogRouteWithChildren
   '/company': typeof CompanyRoute
   '/platform': typeof PlatformRoute
+  '/blog/$slug': typeof BlogSlugRoute
   '/developers/benchmarks': typeof DevelopersBenchmarksRoute
   '/developers/demos': typeof DevelopersDemosRoute
   '/developers/getting-started': typeof DevelopersGettingStartedRoute
@@ -167,8 +185,10 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/blog'
     | '/company'
     | '/platform'
+    | '/blog/$slug'
     | '/developers/benchmarks'
     | '/developers/demos'
     | '/developers/getting-started'
@@ -185,8 +205,10 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/blog'
     | '/company'
     | '/platform'
+    | '/blog/$slug'
     | '/developers/benchmarks'
     | '/developers/demos'
     | '/developers/getting-started'
@@ -203,8 +225,10 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
+    | '/blog'
     | '/company'
     | '/platform'
+    | '/blog/$slug'
     | '/developers/benchmarks'
     | '/developers/demos'
     | '/developers/getting-started'
@@ -222,6 +246,7 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  BlogRoute: typeof BlogRouteWithChildren
   CompanyRoute: typeof CompanyRoute
   PlatformRoute: typeof PlatformRoute
   DevelopersBenchmarksRoute: typeof DevelopersBenchmarksRoute
@@ -253,6 +278,13 @@ declare module '@tanstack/react-router' {
       path: '/company'
       fullPath: '/company'
       preLoaderRoute: typeof CompanyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/blog': {
+      id: '/blog'
+      path: '/blog'
+      fullPath: '/blog'
+      preLoaderRoute: typeof BlogRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/': {
@@ -353,11 +385,29 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DevelopersBenchmarksRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/blog/$slug': {
+      id: '/blog/$slug'
+      path: '/$slug'
+      fullPath: '/blog/$slug'
+      preLoaderRoute: typeof BlogSlugRouteImport
+      parentRoute: typeof BlogRoute
+    }
   }
 }
 
+interface BlogRouteChildren {
+  BlogSlugRoute: typeof BlogSlugRoute
+}
+
+const BlogRouteChildren: BlogRouteChildren = {
+  BlogSlugRoute: BlogSlugRoute,
+}
+
+const BlogRouteWithChildren = BlogRoute._addFileChildren(BlogRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  BlogRoute: BlogRouteWithChildren,
   CompanyRoute: CompanyRoute,
   PlatformRoute: PlatformRoute,
   DevelopersBenchmarksRoute: DevelopersBenchmarksRoute,

@@ -62,6 +62,11 @@ const routes: RouteMeta[] = [
     title: 'Legal | Yeti',
     description: 'Policies and legal documents for Yeti software and Yeti Cloud, including terms of service, privacy policy, and software license.',
   },
+  {
+    path: '/blog',
+    title: 'Blog | Yeti',
+    description: 'Engineering deep-dives, product updates, and the story behind the distributed application platform.',
+  },
 ]
 
 const JSON_LD_HOME = `

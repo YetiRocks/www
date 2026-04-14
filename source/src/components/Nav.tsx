@@ -74,6 +74,9 @@ export default function Nav({ onGetStarted }: NavProps) {
           <Link to="/company" className="nav-link" activeProps={{ className: 'nav-link active' }}>
             Company
           </Link>
+          <Link to="/blog" className="nav-link" activeProps={{ className: 'nav-link active' }}>
+            Blog
+          </Link>
         </div>
         <div className="nav-right">
           <button
@@ -162,6 +165,9 @@ export default function Nav({ onGetStarted }: NavProps) {
         </a>
         <Link to="/company" className="nav-link" onClick={closeMobile}>
           Company
+        </Link>
+        <Link to="/blog" className="nav-link" onClick={closeMobile}>
+          Blog
         </Link>
         <button className="btn btn-primary nav-mobile-cta" onClick={() => { closeMobile(); onGetStarted(); }}>
           Get Started

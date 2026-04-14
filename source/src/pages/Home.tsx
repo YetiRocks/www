@@ -18,7 +18,7 @@ export default function Home({ onGetStarted }: HomeProps) {
           />
           <h1 className="hero-title">Faster Applications, Faster.</h1>
           <p className="hero-subtitle">
-            Create and scale high-performance Rust applications with Yeti's composable, agent-friendly building blocks: database, interfaces, streaming, integrations, security, and telemetry. <span className="nowrap">Move faster with Yeti.</span>
+            The distributed application platform that ships as a single binary. Database, APIs, streaming, auth, AI — one runtime, one deploy, one bill. <span className="nowrap">Move faster with Yeti.</span>
           </p>
           <div className="hero-actions">
             <button className="btn btn-primary btn-lg" onClick={onGetStarted}>
@@ -30,6 +30,17 @@ export default function Home({ onGetStarted }: HomeProps) {
           </div>
         </div>
       </div>
+
+      <section className="section logo-strip">
+        <div className="container">
+          <p className="logo-strip-label">Built on Yeti</p>
+          <div className="logo-strip-row">
+            <img src={`${STATIC_ROUTE}images/logos/agentdaddy.svg`} alt="AgentDaddy" className="logo-strip-img" />
+            <img src={`${STATIC_ROUTE}images/logos/promptresponse.svg`} alt="PromptResponse" className="logo-strip-img" />
+            <img src={`${STATIC_ROUTE}images/logos/streamlock.avif`} alt="StreamLock" className="logo-strip-img" />
+          </div>
+        </div>
+      </section>
 
       <section className="section" id="building-blocks">
         <div className="container">
@@ -74,7 +85,7 @@ export default function Home({ onGetStarted }: HomeProps) {
               <Icon name="bolt" />
               <div className="feature-title">One Instance, Fleet-Level Throughput</div>
               <div className="feature-text">
-                A single Yeti node handles traffic that would need a fleet of Node.js servers. Not because you tuned anything, but because everything compiles to native Rust with RocksDB storage and parallel query execution.
+                90,000+ requests per second on a single core. That's not a cluster. That's one process. Native Rust compilation, RocksDB 11 storage, and parallel query execution — no GC pauses, no cold starts, no surprises under load.
               </div>
             </div>
           </div>
@@ -92,7 +103,7 @@ export default function Home({ onGetStarted }: HomeProps) {
               <Icon name="clipboard" />
               <div className="feature-title">Everything Ships in the Binary</div>
               <div className="feature-text">
-                Authentication, telemetry, vector search, MQTT - they're not plugins you install or services you connect. They ship with Yeti and run in-process. Add <code>auth: true</code> to your config. That's your auth service. No separate deployment, no separate failure mode.
+                Authentication, telemetry, vector search, MQTT, per-table audit trails — they're not plugins you install or services you connect. They ship with Yeti and run in-process. Add <code>@audit</code> to a table for compliance logging with before/after state capture. Zero latency impact. No separate deployment, no separate failure mode.
               </div>
             </div>
             <div className="feature-card">
@@ -110,7 +121,7 @@ export default function Home({ onGetStarted }: HomeProps) {
         <div className="container">
           <h2 className="section-title">One binary runs what used to take a cluster</h2>
           <p className="section-desc">
-            A typical stack needs separate processes for the API server, database, cache, message broker, and background workers. Yeti is a single binary that handles all of it. One process to deploy, monitor, and scale. Your infrastructure bill drops by an order of magnitude.
+            A 49MB binary replaces your API server, database, cache, message broker, and background workers. One process to deploy, monitor, and scale. Your infrastructure bill drops by an order of magnitude.
           </p>
           <div className="features-grid">
             <div className="feature-card">

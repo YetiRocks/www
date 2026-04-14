@@ -1,0 +1,34 @@
+<svg width="100%" viewBox="126 56 399 81" xmlns="http://www.w3.org/2000/svg">
+
+<g transform="translate(119, 50) scale(0.65)">
+  <circle cx="72" cy="72" r="62" fill="#ffffff" opacity="0.12"/>
+  <circle cx="72" cy="72" r="46" fill="#ffffff" opacity="0.08"/>
+
+  <ellipse cx="72" cy="72" rx="56" ry="22" fill="none" stroke="#ffffff" stroke-width="2" opacity="0.5" transform="rotate(-25, 72, 72)"/>
+  <ellipse cx="72" cy="72" rx="56" ry="22" fill="none" stroke="#ffffff" stroke-width="2" opacity="0.3" transform="rotate(35, 72, 72)"/>
+  <ellipse cx="72" cy="72" rx="56" ry="22" fill="none" stroke="#ffffff" stroke-width="2" opacity="0.2" transform="rotate(80, 72, 72)"/>
+
+  <circle cx="72" cy="72" r="9" fill="#ffffff"/>
+
+  <circle cx="112" cy="50" r="6.5" fill="#ffffff" opacity="0.95"/>
+  <circle cx="28" cy="88" r="5.5" fill="#ffffff" opacity="0.8"/>
+  <circle cx="96" cy="100" r="5" fill="#ffffff" opacity="0.7"/>
+
+  <circle cx="38" cy="42" r="4" fill="#ffffff" opacity="0.6"/>
+  <circle cx="118" cy="92" r="5" fill="#ffffff" opacity="0.75"/>
+  <circle cx="72" cy="18" r="4" fill="#ffffff" opacity="0.55"/>
+  <circle cx="60" cy="126" r="3.5" fill="#ffffff" opacity="0.5"/>
+  <circle cx="122" cy="68" r="3.5" fill="#ffffff" opacity="0.45"/>
+
+  <line x1="112" y1="50" x2="122" y2="68" stroke="#ffffff" stroke-width="1.2" opacity="0.25"/>
+  <line x1="28" y1="88" x2="38" y2="42" stroke="#ffffff" stroke-width="1.2" opacity="0.2"/>
+  <line x1="96" y1="100" x2="118" y2="92" stroke="#ffffff" stroke-width="1.2" opacity="0.2"/>
+  <line x1="72" y1="18" x2="112" y2="50" stroke="#ffffff" stroke-width="1.2" opacity="0.15"/>
+  <line x1="60" y1="126" x2="28" y2="88" stroke="#ffffff" stroke-width="1.2" opacity="0.15"/>
+</g>
+
+<g transform="translate(218, 90)">
+  <text fill="#ffffff" font-family="system-ui, -apple-system, sans-serif" font-size="58" font-weight="700" letter-spacing="-2" dominant-baseline="central">agent</text><text fill="#ffffff" font-family="system-ui, -apple-system, sans-serif" font-size="58" font-weight="700" letter-spacing="-2" x="145" dominant-baseline="central" opacity="1.0">daddy</text>
+</g>
+
+</svg>

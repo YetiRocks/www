@@ -48,13 +48,19 @@ export default function Platform() {
             <div className="feature-text">
               Define your data model in GraphQL with custom directives for tables, indexes, relationships, and exports. Yeti generates CRUD operations, query filtering, pagination, and real-time subscriptions from that schema.
             </div>
-            <Code label="schema.graphql">{`type Product @table @export {
+            <Code label="schema.graphql">{`type Product @table(database: "store")
+  @export(rest: true, mqtt: true, public: [read])
+  @distribute(residency: "full", replicationFactor: 3)
+  @audit(retention: 365) {
     id: ID! @primaryKey
     name: String!
     price: Float!
     category: String! @indexed
     inStock: Boolean!
 }`}</Code>
+            <div className="feature-text" style={{ marginTop: 'var(--space-3)', fontSize: 'var(--font-size-sm)', color: 'var(--color-grey)' }}>
+              Four directives, four concerns. <code>@table</code> for storage, <code>@export</code> for interfaces, <code>@distribute</code> for topology, <code>@audit</code> for compliance — each declared independently.
+            </div>
           </div>
           <div className="feature-card">
             <Icon name="wrench" />
@@ -69,6 +75,20 @@ use yeti_sdk::prelude::*;
 resource!(Greeting {
   get => json!({"greeting": "Hello, World!"})
 });`}</Code>
+          </div>
+          <div className="feature-card">
+            <Icon name="shield" />
+            <div className="feature-title">Resource Hooks</div>
+            <div className="feature-text">
+              Pre-request validation, post-request audit, failure alerting — shell commands that run at the resource boundary without touching handler code.
+            </div>
+            <Code label="config.yaml">{`hooks:
+  pre_request:
+    - "./hooks/validate.sh"
+  post_request:
+    - "./hooks/audit-log.sh"
+  post_request_failure:
+    - "./hooks/alert.sh"`}</Code>
           </div>
           <div className="feature-card">
             <Icon name="browser" />
@@ -230,9 +250,9 @@ type Book @table @export {
             <Icon name="refresh" />
             <div className="feature-title">WebSocket + PubSub</div>
             <div className="feature-text">
-              Full WebSocket support for bidirectional communication. Internal PubSub bus
+              Full WebSocket support for bidirectional communication. <code>table.subscribe_all()</code> and <code>table.publish()</code> from any resource handler. Internal PubSub bus
               coordinates events across tables, extensions, and connected clients with
-              topic-based routing.
+              topic-based routing. Kafka bridge for external event streaming.
             </div>
           </div>
           <div className="feature-card">
@@ -301,11 +321,9 @@ type Book @table @export {
           </div>
           <div className="feature-card">
             <Icon name="brain" />
-            <div className="feature-title">yeti-vectors</div>
+            <div className="feature-title">yeti-ai</div>
             <div className="feature-text">
-              Automatic embedding on every insert and update. 38 models available from
-              the admin panel. Persistent embedding cache shared across apps. HNSW
-              indexing with configurable distance metrics.
+              Local embeddings and inference via Candle — no external API calls. Auto-embedding on insert/update, HNSW vector search, chat completion, and model management. Download models from HuggingFace Hub, run them in-process. Your data never leaves your server.
             </div>
             <div className="code-block">
               <span className="code-label">models</span>

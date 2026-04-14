@@ -49,6 +49,44 @@ export default function AI() {
       </section>
 
       <section className="section">
+        <div className="section-label">On-Device Intelligence</div>
+        <h2 className="section-title">Your data never leaves your server.</h2>
+        <p className="section-desc">
+          Yeti's AI extension runs Candle-based embeddings and inference in-process. No API calls to OpenAI. No data exfiltration risk. Models download once from HuggingFace Hub and run locally forever. One directive in your schema enables automatic embedding. One API call runs inference.
+        </p>
+        <div className="features-grid">
+          <div className="feature-card">
+            <Icon name="search" />
+            <div className="feature-title">Schema-Declared Vector Search</div>
+            <div className="feature-text">
+              Add <code>embedding: Vector @indexed(source: "content")</code> to any table. Write a record, the embedding generates automatically. Query by similarity with a single URL parameter. No pipeline. No batch job. No external service.
+            </div>
+          </div>
+          <div className="feature-card">
+            <Icon name="cpu" />
+            <div className="feature-title">Local Inference</div>
+            <div className="feature-text">
+              Chat completion and text generation via Candle. Quantized models fit in 4GB RAM. Swap models at runtime via REST API. MKL acceleration on Intel, Metal on Apple Silicon — automatic hardware detection.
+            </div>
+          </div>
+          <div className="feature-card">
+            <Icon name="layers" />
+            <div className="feature-title">Model Management</div>
+            <div className="feature-text">
+              Download, load, unload, and remove models through the yeti-ai REST API. Multi-tenant isolation: shared public models plus per-deployment custom models. No model server to manage.
+            </div>
+          </div>
+          <div className="feature-card">
+            <Icon name="shield" />
+            <div className="feature-title">Zero Data Leakage</div>
+            <div className="feature-text">
+              Every embedding and inference operation runs inside the Yeti process. Text never leaves the machine. No cloud API keys to rotate. Compliance teams approve it because there's nothing to audit externally.
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section className="section">
         <div className="section-label">Why Agents Love Yeti</div>
         <h2 className="section-title">One system to learn, not seven.</h2>
         <p className="section-desc">
