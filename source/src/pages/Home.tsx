@@ -35,9 +35,9 @@ export default function Home({ onGetStarted }: HomeProps) {
         <div className="container">
           <p className="logo-strip-label">Built on Yeti</p>
           <div className="logo-strip-row">
-            <img src={`${STATIC_ROUTE}images/logos/agentdaddy.svg`} alt="AgentDaddy" className="logo-strip-img" />
-            <img src={`${STATIC_ROUTE}images/logos/promptresponse.svg`} alt="PromptResponse" className="logo-strip-img" />
-            <img src={`${STATIC_ROUTE}images/logos/streamlock.avif`} alt="StreamLock" className="logo-strip-img" />
+            <img src={`${STATIC_ROUTE}images/logos/agentdaddy.svg`} alt="AgentDaddy" className="logo-strip-img logo-agentdaddy" />
+            <img src={`${STATIC_ROUTE}images/logos/promptresponse.svg`} alt="PromptResponse" className="logo-strip-img logo-promptresponse" />
+            <img src={`${STATIC_ROUTE}images/logos/streamlock.avif`} alt="StreamLock" className="logo-strip-img logo-streamlock" />
           </div>
         </div>
       </section>
