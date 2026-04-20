@@ -29,8 +29,8 @@ const IMAGE_API: &str = "/api/blogimage";
 //
 // async fn sync_posts_scheduled(ctx: &ScheduleContext) {
 //     let synced = do_sync(
-//         &ctx.get_table("BlogPost").unwrap(),
-//         &ctx.get_table("BlogImage").unwrap(),
+//         &ctx.table("BlogPost").unwrap(),
+//         &ctx.table("BlogImage").unwrap(),
 //     ).await;
 //     if synced > 0 {
 //         yeti_log!(info, "Scheduled sync: {} posts updated", synced);
@@ -73,7 +73,7 @@ fn fetch_raw(path: &str) -> Result<FetchResponse> {
 }
 
 async fn sync_posts(ctx: &Context) -> usize {
-    let post_table = match ctx.get_table("BlogPost") {
+    let post_table = match ctx.table("BlogPost") {
         Ok(t) => t,
         Err(e) => {
             yeti_log!(warn, "BlogSync: BlogPost table not available: {}", e);
@@ -81,7 +81,7 @@ async fn sync_posts(ctx: &Context) -> usize {
         }
     };
 
-    let image_table = match ctx.get_table("BlogImage") {
+    let image_table = match ctx.table("BlogImage") {
         Ok(t) => t,
         Err(e) => {
             yeti_log!(warn, "BlogSync: BlogImage table not available: {}", e);

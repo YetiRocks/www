@@ -59,7 +59,7 @@ fn is_published(record: &Value, today: &str) -> bool {
 }
 
 async fn list_posts(ctx: &Context, cutoff: &str) -> Result<Response<ResponseBody>> {
-    let table = ctx.get_table("BlogPost")?;
+    let table = ctx.table("BlogPost")?;
     let all = table.get_all().await?;
 
     let mut posts: Vec<Value> = all
@@ -83,7 +83,7 @@ async fn list_posts(ctx: &Context, cutoff: &str) -> Result<Response<ResponseBody
 }
 
 async fn get_post(ctx: &Context, slug: &str, cutoff: &str) -> Result<Response<ResponseBody>> {
-    let table = ctx.get_table("BlogPost")?;
+    let table = ctx.table("BlogPost")?;
     match table.get(slug).await? {
         Some(record) if is_published(&record, cutoff) => ok(record),
         _ => not_found(&format!("Post '{}' not found", slug)),

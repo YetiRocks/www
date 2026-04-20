@@ -17,7 +17,7 @@ resource!(BlogImage {
             None => return error_response(400, "Usage: /blogimage/{slug}/{filename}"),
         };
 
-        let table = ctx.get_table("BlogImage")?;
+        let table = ctx.table("BlogImage")?;
 
         // The image ID in the table is "{slug}/{filename}"
         match table.get(path_id).await {
