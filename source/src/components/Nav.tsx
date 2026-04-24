@@ -62,6 +62,9 @@ export default function Nav({ onGetStarted }: NavProps) {
           </Link>
         </div>
         <div className="nav-center">
+          <Link to="/" className="nav-link" activeProps={{ className: 'nav-link active' }} activeOptions={{ exact: true }}>
+            Home
+          </Link>
           <Link to="/platform" className="nav-link" activeProps={{ className: 'nav-link active' }}>
             Product
           </Link>
@@ -137,6 +140,9 @@ export default function Nav({ onGetStarted }: NavProps) {
       )}
 
       <div className={`nav-mobile${mobileOpen ? ' open' : ''}`}>
+        <Link to="/" className="nav-link" onClick={closeMobile}>
+          Home
+        </Link>
         <Link to="/platform" className="nav-link" onClick={closeMobile}>
           Product
         </Link>
