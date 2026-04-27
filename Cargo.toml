@@ -11,3 +11,8 @@ resources = "resources/*.rs"
 static = { path = "web", root = "/", source = "source", spa = true, build = "npm install && npm run build" }
 
 [dependencies]
+# In-memory tarball extraction for blog_sync (fetch GitHub's
+# /repos/.../tarball/{ref} archive in one HTTP call rather than
+# enumerating posts via the per-file API).
+tar = "0.4"
+flate2 = "1.1"

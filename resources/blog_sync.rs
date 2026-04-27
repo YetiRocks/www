@@ -1,27 +1,38 @@
 // Blog Sync Resource
 //
-// Fetches markdown posts from YetiRocks/blog GitHub repo, renders to HTML,
-// downloads images, and stores everything in local tables.
+// Fetches the YetiRocks/blog GitHub repo as a single tarball
+// (`/repos/{owner}/{repo}/tarball/{ref}`), decompresses + walks the
+// archive in memory, renders markdown posts to HTML, and stores
+// posts + images in local tables.
 //
 // GET /www/api/blogsync → trigger manual sync + return status
 //
 // Automatic sync: runs every 5 minutes via schedule!() bridge.
 // On startup, the first schedule fire syncs immediately.
 //
-// Repo structure:
+// Repo structure (under the tarball's top-level directory):
 //   posts/{slug}/index.md        — post content with YAML frontmatter
 //   posts/{slug}/hero_image.png  — optional hero image
 //   posts/{slug}/*.png           — additional images referenced in markdown
 //
-// Images are downloaded and stored in BlogImage table as base64.
-// HTML references /www/api/blogimage/{slug}/{filename} for all images.
+// Images are stored in BlogImage table as base64. HTML references
+// /www/api/blogimage/{slug}/{filename} for all images.
+//
+// Why the tarball: one HTTP request gets an atomic snapshot of the
+// repo at the resolved SHA. The previous per-file API approach made
+// 1 + 2N + M calls (root listing + per-post index.md + per-post
+// folder listing + per-image fetch), which is N×M-style fan-out
+// against an API that anonymously rate-limits at 60 req/hr.
 
+use std::collections::{HashMap, HashSet};
+use std::io::Read;
+
+use flate2::read::GzDecoder;
+use tar::Archive;
 use yeti_sdk::prelude::*;
 
 const REPO: &str = "YetiRocks/blog";
 const BRANCH: &str = "main";
-const POSTS_DIR: &str = "posts";
-const API_RAW_BASE: &str = "https://api.github.com/repos/YetiRocks/blog/contents/posts";
 const IMAGE_API: &str = "/api/blogimage";
 
 // TODO: Uncomment when schedule bridge is implemented (schedule-bridge.md)
@@ -33,7 +44,7 @@ const IMAGE_API: &str = "/api/blogimage";
 //         &ctx.table("BlogImage").unwrap(),
 //     ).await;
 //     if synced > 0 {
-//         yeti_log!(info, "Scheduled sync: {} posts updated", synced);
+//         tracing::info!("Scheduled sync: {} posts updated", synced);
 //     }
 // }
 
@@ -46,186 +57,197 @@ resource!(BlogSync {
     }
 });
 
-/// Fetch with auth from BLOG_PAT env var (if set).
-
-fn authed_fetch(url: &str) -> Result<FetchResponse> {
-    let mut req = fetch!(url).header("User-Agent", "yeti-www");
-    if let Ok(token) = std::env::var("BLOG_PAT") {
-        if !token.is_empty() {
-            req = req.header("Authorization", &format!("token {token}"));
-        }
-    }
-    req.send()
+/// One post's worth of files extracted from the tarball.
+#[derive(Default)]
+struct PostBundle {
+    index_md: Option<Vec<u8>>,
+    images: HashMap<String, Vec<u8>>, // filename -> raw bytes
 }
 
-/// Fetch raw file content via GitHub API (no CDN cache).
-fn fetch_raw(path: &str) -> Result<FetchResponse> {
-    let url = format!("{}/{}?ref={}", API_RAW_BASE, path, BRANCH);
-    let mut req = fetch!(&url)
+/// Pull the repo archive and group its `posts/<slug>/*` entries by slug.
+/// Returns `None` on any I/O or HTTP error so the caller can keep the
+/// existing local state instead of clobbering it with partial data.
+fn fetch_repo_bundles() -> Option<HashMap<String, PostBundle>> {
+    let url = format!(
+        "https://api.github.com/repos/{}/tarball/{}",
+        REPO, BRANCH
+    );
+    let response = match fetch!(&url)
         .header("User-Agent", "yeti-www")
-        .header("Accept", "application/vnd.github.raw");
-    if let Ok(token) = std::env::var("BLOG_PAT") {
-        if !token.is_empty() {
-            req = req.header("Authorization", &format!("token {token}"));
+        .header("Accept", "application/vnd.github.v3+json")
+        .send()
+    {
+        Ok(r) if r.ok() => r,
+        Ok(r) => {
+            tracing::warn!("BlogSync: GitHub tarball returned {}", r.status);
+            return None;
+        },
+        Err(e) => {
+            tracing::warn!("BlogSync: GitHub tarball fetch failed: {}", e);
+            return None;
+        },
+    };
+
+    let bytes: &[u8] = response.bytes();
+    let gz = GzDecoder::new(bytes);
+    let mut archive = Archive::new(gz);
+
+    let mut bundles: HashMap<String, PostBundle> = HashMap::new();
+
+    let entries = match archive.entries() {
+        Ok(e) => e,
+        Err(e) => {
+            tracing::warn!("BlogSync: tar entries iter failed: {}", e);
+            return None;
+        },
+    };
+
+    for entry_result in entries {
+        let mut entry = match entry_result {
+            Ok(e) => e,
+            Err(e) => {
+                tracing::warn!("BlogSync: tar entry read failed: {}", e);
+                continue;
+            },
+        };
+
+        // GitHub tarballs nest everything under
+        // `<owner>-<repo>-<sha-prefix>/...`. Skip directory entries
+        // and anything outside `posts/<slug>/<filename>`.
+        if !entry.header().entry_type().is_file() {
+            continue;
+        }
+        let path = match entry.path() {
+            Ok(p) => p.into_owned(),
+            Err(_) => continue,
+        };
+        let components: Vec<_> = path.components().collect();
+        // Expect [<top>, "posts", "<slug>", "<filename>"] — at least 4.
+        if components.len() < 4 {
+            continue;
+        }
+        if components[1].as_os_str() != "posts" {
+            continue;
+        }
+        let slug = match components[2].as_os_str().to_str() {
+            Some(s) => s.to_string(),
+            None => continue,
+        };
+        let filename = match components[3].as_os_str().to_str() {
+            Some(s) => s.to_string(),
+            None => continue,
+        };
+
+        let mut buf = Vec::new();
+        if let Err(e) = entry.read_to_end(&mut buf) {
+            tracing::warn!("BlogSync: read {} failed: {}", path.display(), e);
+            continue;
+        }
+
+        let bundle = bundles.entry(slug).or_default();
+        if filename == "index.md" {
+            bundle.index_md = Some(buf);
+        } else if is_image_filename(&filename) {
+            bundle.images.insert(filename, buf);
         }
     }
-    req.send()
+
+    Some(bundles)
+}
+
+fn is_image_filename(name: &str) -> bool {
+    name.ends_with(".png")
+        || name.ends_with(".jpg")
+        || name.ends_with(".jpeg")
+        || name.ends_with(".gif")
+        || name.ends_with(".webp")
+        || name.ends_with(".avif")
+}
+
+fn content_type_for(name: &str) -> &'static str {
+    if name.ends_with(".jpg") || name.ends_with(".jpeg") {
+        "image/jpeg"
+    } else if name.ends_with(".gif") {
+        "image/gif"
+    } else if name.ends_with(".webp") {
+        "image/webp"
+    } else if name.ends_with(".avif") {
+        "image/avif"
+    } else {
+        "image/png"
+    }
 }
 
 async fn sync_posts(ctx: &Context) -> usize {
     let post_table = match ctx.table("BlogPost") {
         Ok(t) => t,
         Err(e) => {
-            yeti_log!(warn, "BlogSync: BlogPost table not available: {}", e);
+            tracing::warn!("BlogSync: BlogPost table not available: {}", e);
             return 0;
-        }
+        },
     };
 
     let image_table = match ctx.table("BlogImage") {
         Ok(t) => t,
         Err(e) => {
-            yeti_log!(warn, "BlogSync: BlogImage table not available: {}", e);
+            tracing::warn!("BlogSync: BlogImage table not available: {}", e);
             return 0;
-        }
+        },
     };
 
-    // Fetch top-level directory listing (each entry is a post folder)
-    let api_url = format!(
-        "https://api.github.com/repos/{}/contents/{}?ref={}",
-        REPO, POSTS_DIR, BRANCH
-    );
-
-    let response = match authed_fetch(&api_url) {
-        Ok(r) => r,
-        Err(e) => {
-            yeti_log!(warn, "BlogSync: GitHub API failed: {}", e);
-            return 0;
-        }
+    let bundles = match fetch_repo_bundles() {
+        Some(b) => b,
+        None => return 0, // already logged
     };
 
-    if !response.ok() {
-        yeti_log!(warn, "BlogSync: GitHub API returned {}", response.status);
-        return 0;
-    }
-
-    let entries: Vec<Value> = match response.json() {
-        Ok(Value::Array(arr)) => arr,
-        Ok(_) => {
-            yeti_log!(warn, "BlogSync: expected array from GitHub API");
-            return 0;
-        }
-        Err(e) => {
-            yeti_log!(warn, "BlogSync: parse failed: {}", e);
-            return 0;
-        }
-    };
-
+    let repo_slugs: HashSet<String> = bundles.keys().cloned().collect();
     let mut synced = 0usize;
 
-    // Collect repo slugs for cleanup pass
-    let repo_slugs: std::collections::HashSet<String> = entries
-        .iter()
-        .filter(|e| e.get("type").and_then(|v| v.as_str()) == Some("dir"))
-        .filter_map(|e| e.get("name").and_then(|v| v.as_str()).map(|s| s.to_string()))
-        .collect();
-
-    for entry in &entries {
-        if entry.get("type").and_then(|v| v.as_str()) != Some("dir") {
-            continue;
-        }
-
-        let slug = match entry.get("name").and_then(|v| v.as_str()) {
-            Some(n) => n,
-            None => continue,
+    for (slug, bundle) in &bundles {
+        let raw_bytes = match bundle.index_md.as_ref() {
+            Some(b) => b,
+            None => continue, // post folder without an index.md, skip
+        };
+        let raw = match std::str::from_utf8(raw_bytes) {
+            Ok(s) => s,
+            Err(_) => {
+                tracing::warn!("BlogSync: index.md for '{}' is not utf-8", slug);
+                continue;
+            },
         };
 
-        // Fetch index.md via API (no CDN cache)
-        let raw = match fetch_raw(&format!("{}/index.md", slug)) {
-            Ok(r) if r.ok() => r.text().to_string(),
-            _ => continue,
-        };
-
-        let (meta, content) = parse_frontmatter(&raw);
+        let (meta, content) = parse_frontmatter(raw);
         let title = match meta.get("title") {
             Some(t) => t.clone(),
             None => continue,
         };
 
-        // List files in the post folder to find images
-        let folder_api = format!(
-            "https://api.github.com/repos/{}/contents/{}/{}?ref={}",
-            REPO, POSTS_DIR, slug, BRANCH
-        );
-        let image_files: Vec<String> = match authed_fetch(&folder_api) {
-            Ok(r) if r.ok() => {
-                let files: Vec<Value> = match r.json() {
-                    Ok(Value::Array(a)) => a,
-                    _ => Vec::new(),
-                };
-                files
-                    .iter()
-                    .filter_map(|f| {
-                        let name = f.get("name")?.as_str()?;
-                        if name.ends_with(".png")
-                            || name.ends_with(".jpg")
-                            || name.ends_with(".jpeg")
-                            || name.ends_with(".gif")
-                            || name.ends_with(".webp")
-                            || name.ends_with(".avif")
-                        {
-                            Some(name.to_string())
-                        } else {
-                            None
-                        }
-                    })
-                    .collect()
-            },
-            _ => Vec::new(),
-        };
-
-        // Download and store each image
+        // Persist images, track whether a hero exists.
         let mut has_hero = false;
-        for filename in &image_files {
-            let img_path = format!("{}/{}", slug, filename);
-            if let Ok(img_resp) = fetch_raw(&img_path) {
-                if img_resp.ok() {
-                    let bytes = img_resp.bytes();
-                    let content_type = if filename.ends_with(".jpg") || filename.ends_with(".jpeg") {
-                        "image/jpeg"
-                    } else if filename.ends_with(".gif") {
-                        "image/gif"
-                    } else if filename.ends_with(".webp") {
-                        "image/webp"
-                    } else if filename.ends_with(".avif") {
-                        "image/avif"
-                    } else {
-                        "image/png"
-                    };
-
-                    let image_id = format!("{}/{}", slug, filename);
-                    let record = json!({
-                        "id": image_id,
-                        "contentType": content_type,
-                        "data": base64_encode(bytes),
-                    });
-
-                    if let Err(e) = image_table.put(&image_id, record).await {
-                        yeti_log!(warn, "BlogSync: image store failed for {}/{}: {}", slug, filename, e);
-                    }
-
-                    if filename == "hero_image.png"
-                        || filename == "hero_image.jpg"
-                        || filename == "hero_image.jpeg"
-                    {
-                        has_hero = true;
-                    }
-                }
+        for (filename, image_bytes) in &bundle.images {
+            let image_id = format!("{}/{}", slug, filename);
+            let record = json!({
+                "id": image_id,
+                "contentType": content_type_for(filename),
+                "data": base64_encode(image_bytes),
+            });
+            if let Err(e) = image_table.put(&image_id, record).await {
+                tracing::warn!(
+                    "BlogSync: image store failed for {}/{}: {}",
+                    slug,
+                    filename,
+                    e
+                );
+            }
+            if filename == "hero_image.png"
+                || filename == "hero_image.jpg"
+                || filename == "hero_image.jpeg"
+            {
+                has_hero = true;
             }
         }
 
-        // Convert markdown to HTML with local image URLs
         let html = markdown_to_html(&content, slug);
-
         let hero_value = if has_hero {
             json!(format!("{}/{}/hero_image.png", IMAGE_API, slug))
         } else {
@@ -247,38 +269,45 @@ async fn sync_posts(ctx: &Context) -> usize {
         match post_table.put(slug, record).await {
             Ok(_) => synced += 1,
             Err(e) => {
-                yeti_log!(warn, "BlogSync: write failed for '{}': {}", slug, e);
-            }
+                tracing::warn!("BlogSync: write failed for '{}': {}", slug, e);
+            },
         }
     }
 
-    // Remove posts that no longer exist in the repo
+    // Cleanup pass: drop posts (and their images) that no longer
+    // appear in the repo snapshot.
     let mut removed = 0usize;
     let existing = post_table.get_all().await.unwrap_or_default();
     for record in &existing {
-        if let Some(id) = record.get("id").and_then(|v| v.as_str()) {
-            if !repo_slugs.contains(id) {
-                if let Err(e) = post_table.delete(id).await {
-                    yeti_log!(warn, "BlogSync: failed to remove '{}': {}", id, e);
-                } else {
-                    // Also clean up associated images
-                    let prefix = format!("{}/", id);
-                    let images = image_table.get_all().await.unwrap_or_default();
-                    for img in &images {
-                        if let Some(img_id) = img.get("id").and_then(|v| v.as_str()) {
-                            if img_id.starts_with(&prefix) {
-                                let _ = image_table.delete(img_id).await;
-                            }
-                        }
-                    }
-                    removed += 1;
-                }
+        let Some(id) = record.get("id").and_then(|v| v.as_str()) else {
+            continue;
+        };
+        if repo_slugs.contains(id) {
+            continue;
+        }
+        if let Err(e) = post_table.delete(id).await {
+            tracing::warn!("BlogSync: failed to remove '{}': {}", id, e);
+            continue;
+        }
+        let prefix = format!("{}/", id);
+        let images = image_table.get_all().await.unwrap_or_default();
+        for img in &images {
+            if let Some(img_id) = img.get("id").and_then(|v| v.as_str())
+                && img_id.starts_with(&prefix)
+            {
+                let _ = image_table.delete(img_id).await;
             }
         }
+        removed += 1;
     }
 
     if synced > 0 || removed > 0 {
-        yeti_log!(info, "BlogSync: synced {} posts, removed {} from {}", synced, removed, REPO);
+        tracing::info!(
+            "BlogSync: synced {} posts, removed {} from {}",
+            synced,
+            removed,
+            REPO
+        );
     }
 
     synced
