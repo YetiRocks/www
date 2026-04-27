@@ -3,7 +3,7 @@ name: Deploy
 # yeti-www is the canonical aggregator deploy: root_app `www` plus the
 # autoLoad bundle declared in yeti-config.yaml (yeti-documentation +
 # the demo-* sites). The unified workflow at
-# YetiRocks/yeti/.github/workflows/yeti-app-deploy.yml handles the
+# YetiRocks/yeti-workflows/.github/workflows/yeti-app-deploy.yml handles the
 # whole pipeline: download yeti CLI → mirror this repo + clone the
 # autoLoad bundle → npm-build every frontend → `yeti --buildonly` to
 # scaffold + production-profile compile → scp + systemd restart.
@@ -15,7 +15,7 @@ on:
 
 jobs:
   deploy:
-    uses: YetiRocks/yeti/.github/workflows/yeti-app-deploy.yml@main
+    uses: YetiRocks/yeti-workflows/.github/workflows/yeti-app-deploy.yml@main
     with:
       service_name: yeti
       service_description: "Yeti Application Platform (yeti-www aggregator)"
